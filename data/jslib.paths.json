@@ -1,0 +1,11 @@
+{
+    "almond": "../../../libs/almond/loader",
+    "base64": "../../../libs/base64/base64.min",
+    "jquery": "../../../libs/jquery/jquery.min",
+    "require": "../../../libs/require/require",
+    "sm.mobile": "../../../libs/sm.mobile/sm.mobile",
+    "sm.modern": "../../../libs/sm.modern/sm.modern",
+    "smcore": "../../../libs/smcore/smcore",
+    "underscore": "../../../libs/underscore/underscore.min",
+    "zepto": "../../../libs/zepto/zepto.min"
+}

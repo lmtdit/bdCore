@@ -1,0 +1,18 @@
+{
+    "smcore": {
+        "exports": "smcore"
+    },
+    "waypoint":{
+        "deps": ["jquery"],
+        "exports": "$.fn.waypoint"
+    },
+    "cookie": {
+      "deps": [
+        "jquery"
+      ],
+      "exports": "$.cookie"
+    },
+    "underscore":{
+        "exports": "_"
+    }
+}
