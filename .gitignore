@@ -13,6 +13,6 @@
 .smbdelete*
 *.sublime*
 .sass-cache
-# config.json
+config.json
 node_modules/*
 node_modules
