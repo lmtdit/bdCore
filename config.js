@@ -42,7 +42,7 @@ module.exports = {
   staticRoot: "http://" + cndDomain + "/",
   staticPath: "http://" + cndDomain + "/" + srcPath + "/",
   cndStaticPath: "http://" + cndDomain + "/" + distPath + "/",
-  GLOBALVAR: "var STATICPATH='http://" + cndDomain + "',VARS=window['VARS']={},_VM_=window['_VM_']={};\n",
+  GLOBALVAR: ("var STATIC_PATH='http://" + cndDomain + "/") + (cfg.evn === "dev" ? srcPath : distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={};\n",
   dataPath: './data',
   spriteDataPath: './data/sp.map.json',
   spriteHasPath: './data/sp.has.json',
