@@ -1,7 +1,6 @@
 {
-  "cookie": "vendor/cookie/jquery.cookie",
-  "jquery": "vendor/jquery/jquery",
   "require": "vendor/require/require",
   "smcore": "vendor/smcore/smcore",
-  "underscore": "vendor/underscore/underscore"
+  "underscore": "vendor/underscore/underscore",
+  "zepto": "vendor/zepto/zepto"
 }
