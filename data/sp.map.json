@@ -44,5 +44,13 @@
         "radio.png",
         "up-down-active.png",
         "up-down.png"
+    ],
+    "minifoot": [
+        "foot-ser1.png",
+        "foot-ser2.png",
+        "foot-ser3.png",
+        "foot-ser4.png",
+        "foot-ser5.png",
+        "foot-ser6.png"
     ]
 }
