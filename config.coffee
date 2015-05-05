@@ -50,7 +50,7 @@ module.exports =
   staticRoot: "http://" + cndDomain + "/"
   staticPath: "http://" + cndDomain + "/" + srcPath + "/"
   cndStaticPath: "http://" + cndDomain + "/" + distPath + "/"
-  GLOBALVAR: "var STATICPATH='http://#{cndDomain}',VARS=window['VARS']={},_VM_=window['_VM_']={};\n"
+  GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "dev" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={};\n"
   # 一些gulp构建配置
   dataPath: './data'
   spriteDataPath: './data/sp.map.json'
