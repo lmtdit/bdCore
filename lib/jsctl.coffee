@@ -38,6 +38,14 @@ tryEval = (str)->
 
 jsHash = {}
 
+jsImgRegex = /STATIC_PATH\s*\+\s*(('|")[\s\S]*?(.jpg|.png|.gif)('|"))/g
+
+cssBgMap = {}
+try
+    cssBgMap = JSON.parse fs.readFileSync(path.join(config.mapPath, config.cssBgMap), 'utf8')
+catch e
+    # ...
+
 _buildJsDistMap = (map)->
     mapPath = config.mapPath
     jsonData = JSON.stringify map, null, 2
@@ -56,8 +64,15 @@ _buildJs = (source,outName,cb)->
     _jsHash = {}
     outPath = path.join rootPath, config.jsDistPath
     not fs.existsSync(outPath) and butil.mkdirsSync(outPath)
+    _source = source.replace jsImgRegex,(str,map)->
+        key = map.replace(/(^\'|\")|(\'|\"$)/g, '')
+                 .replace('/_img/', '')
+        val = if _.has(cssBgMap,key) then cssBgMap[key].distname else ( if map.indexOf('data:') > -1 or map.indexOf('about:') > -1 then map else key + '?=t' + String(new Date().getTime()).substr(0,8) )
+        _str = str.replace(key, val)
+                  .replace('/_img/', '/img/')
+        return _str
     _content = amdclean.clean({
-            code:source
+            code: _source
             wrap:
                 start: if outName is config.coreJsName then GLOBALVAR else ';(function() {\n'
                 end: if outName is config.coreJsName then '' else '\n}());'
@@ -309,7 +324,7 @@ class jsToDist extends jsDepBuilder
                 try
                     _source = String(_jsData.join(''))
                     _buildJs _source,_outName,(map)->
-                        gutil.log "Combine",color.cyan("'#{module}'"),"===> #{_outName}"
+                        gutil.log "Combine",color.cyan("'#{module}'"),"---> #{_outName}"
                         _.assign jsHash,map
                     _num++
                 catch error

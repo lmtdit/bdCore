@@ -1,1 +1,48 @@
-{}
+{
+    "common": [
+        "app.png",
+        "cart.png",
+        "cartnum.png",
+        "contact.png",
+        "icon-cart.png",
+        "icon-chat.png",
+        "icon-circle.png",
+        "icon-kf.png",
+        "icon-logo.png",
+        "icon-server1.png",
+        "icon-server2.png",
+        "icon-server3.png",
+        "icon-server4.png",
+        "icon-tel.png",
+        "icon-top.png",
+        "logo.png",
+        "nav-active.png",
+        "nav-bg.png",
+        "nav.png",
+        "tel.png"
+    ],
+    "index": [
+        "dot.png",
+        "go-special.png",
+        "hot.png",
+        "i-time.png",
+        "icon-collection.png",
+        "icon-grab.png",
+        "icon-notice.png",
+        "icon-time.png",
+        "new.png",
+        "snapping.png",
+        "t-sale.png",
+        "tips-bg.png"
+    ],
+    "list": [
+        "down-active.png",
+        "down.png",
+        "icon-collection.png",
+        "icon-time.png",
+        "radio-active.png",
+        "radio.png",
+        "up-down-active.png",
+        "up-down.png"
+    ]
+}
