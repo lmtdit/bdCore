@@ -156,18 +156,14 @@ gulp.task('default', [], function() {
     return build.sprite(function() {
       return build.less2css(function() {
         return build.bgMap(function() {
-          return build.css2dist(function() {
-            return build.jsLibs(function() {
-              return build.config(function() {
-                return build.tpl2dev(function() {
-                  return build.js2dev(function() {
-                    return build.js2dist(function() {
-                      return build.htmlctl(function() {
-                        return setTimeout(function() {
-                          return gulp.start(['watch']);
-                        }, 2000);
-                      });
-                    });
+          return build.jsLibs(function() {
+            return build.config(function() {
+              return build.tpl2dev(function() {
+                return build.js2dev(function() {
+                  return build.htmlctl(function() {
+                    return setTimeout(function() {
+                      return gulp.start(['watch']);
+                    }, 2000);
                   });
                 });
               });

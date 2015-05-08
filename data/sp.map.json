@@ -20,37 +20,5 @@
         "nav-bg.png",
         "nav.png",
         "tel.png"
-    ],
-    "index": [
-        "dot.png",
-        "go-special.png",
-        "hot.png",
-        "i-time.png",
-        "icon-collection.png",
-        "icon-grab.png",
-        "icon-notice.png",
-        "icon-time.png",
-        "new.png",
-        "snapping.png",
-        "t-sale.png",
-        "tips-bg.png"
-    ],
-    "list": [
-        "down-active.png",
-        "down.png",
-        "icon-collection.png",
-        "icon-time.png",
-        "radio-active.png",
-        "radio.png",
-        "up-down-active.png",
-        "up-down.png"
-    ],
-    "minifoot": [
-        "foot-ser1.png",
-        "foot-ser2.png",
-        "foot-ser3.png",
-        "foot-ser4.png",
-        "foot-ser5.png",
-        "foot-ser6.png"
     ]
 }

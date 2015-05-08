@@ -116,16 +116,14 @@ gulp.task 'default',[], ->
         build.sprite ->
             build.less2css ->
                 build.bgMap ->
-                    build.css2dist ->
-                        build.jsLibs ->
-                            build.config ->
-                                build.tpl2dev ->
-                                    build.js2dev ->
-                                        build.js2dist ->
-                                            build.htmlctl ->
-                                                setTimeout ->
-                                                    gulp.start ['watch']
-                                                ,2000
+                    build.jsLibs ->
+                        build.config ->
+                            build.tpl2dev ->
+                                build.js2dev ->
+                                    build.htmlctl ->
+                                        setTimeout ->
+                                            gulp.start ['watch']
+                                        ,2000
     ,100
 ###
 # release
