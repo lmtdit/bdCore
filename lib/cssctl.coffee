@@ -97,7 +97,8 @@ pushCss = (file,done)->
             _distname = obj.name + (if not _isCombo then  '.' + obj.hash.substr(0,_hashLen) else '' ) + obj.ext
             cssMap[obj.base] = 
                 hash : obj.hash
-                distname : _distname
+                distname : _distname.replace(/^\//,'')
+
             _buildCss _distname,_source
         ,->
             _buildCssMap cssMap,->

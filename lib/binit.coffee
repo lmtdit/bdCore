@@ -19,7 +19,6 @@ md5         = butil.md5
 hashLength  = config.hashLength
 mapPath     = config.mapPath
 
-
 Imagemin = require('imagemin')
 
 ###
@@ -155,6 +154,7 @@ exports.paths = (ext,cb)->
                     hash:_hash
                     distname:_name.replace(/\\\\/g,'/')
                                   .replace(/\\/g,'/')
+                                  .replace(/^\//,'')
 
     makePaths(_path)
     jsonData = JSON.stringify _map, null, 2
@@ -227,3 +227,18 @@ exports.cfg = (cb)->
     gutil.log color.green "config.js build success!"
     _cb()
 
+
+# push json map to TPL dist dir
+exports.jsonToDist = (cb)->
+    _cb = cb or ->
+    _srcPath = config.mapPath
+    _distPath = config.phpMapPath
+    _outPath = path.join config.htmlTplDist,'map'
+    not fs.existsSync(_outPath) and butil.mkdirsSync(_outPath)
+    fs.readdirSync(_srcPath).forEach (file)->
+        if file.indexOf(".json") != -1
+            file_name = file.replace(".json","")
+            _jsonData = JSON.parse fs.readFileSync(path.join(_srcPath, file), 'utf8')
+            fs.writeFileSync path.join(_outPath, file), JSON.stringify(_jsonData), 'utf8'
+    gutil.log "ALL map pushed!"
+    _cb()

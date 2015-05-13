@@ -17,10 +17,11 @@ htmlCtl   = require './htmlctl'
 jsto    = require './jsto'
 color   = gutil.colors
 
+
 # 错误报警,beep响两声
 butil       = require './butil'
 errrHandler = butil.errrHandler
-
+binit       = require './binit'
 
 # JS语法检测
 jshint  = require 'jshint'
@@ -72,7 +73,7 @@ class checkFile extends watchChecker
         gutil.log "Conbine",'\'' + color.cyan(_file.split('/js/')[1]) + '\'',"..."
         jsto _file,->
             gutil.log color.cyan(_file.split('/js/')[1]),"Conbined!!!"
-            cb()
+            binit.jsonToDist -> cb()
     tpl:(cb)=>
         _type = @type()
         return false if _type isnt 'tpl'
@@ -94,7 +95,8 @@ class checkFile extends watchChecker
         cssbd.less2css ->
             gutil.log color.green "Less compile success!"
             css2dist ->
-                cb()
+                binit.jsonToDist ->
+                    cb()
     sprite: (cb)=>
         _type = @type()
         return false if _type isnt 'png'

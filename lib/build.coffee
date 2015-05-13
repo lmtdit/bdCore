@@ -155,6 +155,8 @@ exports.all2dist = (cb)->
 # 将静态资源注入到php模板文件中
 exports.htmlctl = htmlCtl
 
+# 把map文件发布到HTML模板的生产目录
+exports.json2dist = binit.jsonToDist
 
 ###
 # Auto watch API

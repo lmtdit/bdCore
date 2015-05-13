@@ -71,6 +71,10 @@ gulp.task 'css', ->
 gulp.task 'all2dist', ->
     build.all2dist()
 
+gulp.task 'map2dist', ->
+    build.json2dist ->
+       
+
 ###
 # Injecting static files relative to PHP-tpl files
 ###
@@ -139,7 +143,8 @@ gulp.task 'release',['del.dist'], ->
                                 build.tpl2dev ->
                                     build.js2dev ->
                                         build.js2dist -> 
-                                            build.htmlctl ->
-                                                gutil.log color.green 'Finished Release!'
+                                            build.json2dist ->
+                                                build.htmlctl ->
+                                                    gutil.log color.green 'Finished Release!'
     ,100
 

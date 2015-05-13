@@ -104,6 +104,10 @@ gulp.task('all2dist', function() {
   return build.all2dist();
 });
 
+gulp.task('map2dist', function() {
+  return build.json2dist(function() {});
+});
+
 
 /*
  * Injecting static files relative to PHP-tpl files
@@ -191,8 +195,10 @@ gulp.task('release', ['del.dist'], function() {
                 return build.tpl2dev(function() {
                   return build.js2dev(function() {
                     return build.js2dist(function() {
-                      return build.htmlctl(function() {
-                        return gutil.log(color.green('Finished Release!'));
+                      return build.json2dist(function() {
+                        return build.htmlctl(function() {
+                          return gutil.log(color.green('Finished Release!'));
+                        });
                       });
                     });
                   });

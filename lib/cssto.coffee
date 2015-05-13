@@ -55,10 +55,8 @@ _stream = (files,cb,cb2)->
         _nameObj.hash = md5(source.contents)
         cssBgReg = /url\s*\(([^\)]+)\)/g
         _source = String(source.contents).replace cssBgReg, (str,map)->
-            if map.indexOf('fonts/') isnt -1
-                fontPath = (_cndPath + path.join(_nameObj.dir,map)).replace(/\\/g,'/')
-                # console.log fontPath
-                return str.replace(map, fontPath)
+            if map.indexOf('fonts/') isnt -1 or map.indexOf('font/') isnt -1
+                return str
             else
                 key = map.replace('../_img/', '')
                          .replace(/(^\'|\")|(\'|\"$)/g, '')
@@ -75,6 +73,13 @@ _buildCss = (_filePath,source)->
 # 生成css的Hash Map
 _buildPaths = binit.paths
 
+# 生成css的Hash Map
+_buildCssMap = (data,cb)->
+    jsonData = JSON.stringify data, null, 2
+    butil.mkdirsSync(_mapPath)
+    fs.writeFileSync path.join(_mapPath, _cssMapName), jsonData, 'utf8'
+    cb()
+
 ###
 # css生产文件构建函数
 # @param {string} file 同gulp.src接口所接收的参数，默认是css源文件的所有css文件
@@ -82,6 +87,7 @@ _buildPaths = binit.paths
 ###
 pushCss = (file,done)->
     gutil.log color.yellow "Push Css to dist."
+    cssMap = {}
     if not file
         _done = ->
         _file = _cssPath + '**/*.css'
@@ -97,12 +103,17 @@ pushCss = (file,done)->
             _source = source
             _distPath = obj.dir + '/' + obj.name + '.' + obj.hash.substr(0,_hashLen) + obj.ext
             _distPath2 = obj.dir + '/' + obj.name + obj.ext
+
+            cssMap[obj.base] = 
+                hash : obj.hash
+                distname : _distPath.replace(/^\//,'')
+                
             _filePath = path.join(_cssDistPath, _distPath)
             _filePath2 = path.join(_cssDistPath, _distPath2)
             _buildCss _filePath,_source
             _buildCss _filePath2,_source
         ,->
-            _buildPaths '.css',->
+            _buildCssMap cssMap,->
                 gutil.log color.green 'Pushed!'
                 _done()
     ) 
