@@ -230,7 +230,7 @@ class jsToDist extends jsDepBuilder
         _outName = config.coreJsName
         _coreMods = @coreMods
         _include = _.union _coreMods.concat(modules)
-        # console.log _include
+        console.log _include
         _paths = JSON.parse fs.readFileSync(path.join(config.dataPath, 'jslibs.json'), 'utf8')
         _shim = JSON.parse fs.readFileSync(path.join(config.dataPath, 'shim.json'), 'utf8')
         
@@ -252,7 +252,7 @@ class jsToDist extends jsDepBuilder
         gutil.log color.yellow "Combine #{config.coreJsName} module! Waitting..."
         _cb = cb or ->
         _makeDeps = @makeDeps()
-        _depLibs = _makeDeps.depLibs  
+        _depLibs = _makeDeps.depLibs
         # 核心库队列
         @rjsBuilder _depLibs,-> _cb()
 

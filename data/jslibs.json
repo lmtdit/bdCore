@@ -1,6 +1,6 @@
 {
+  "Zepto": "vendor/Zepto/zepto",
   "require": "vendor/require/require",
   "smcore": "vendor/smcore/smcore",
-  "underscore": "vendor/underscore/underscore",
-  "zepto": "vendor/zepto/zepto"
+  "underscore": "vendor/underscore/underscore"
 }
