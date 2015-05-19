@@ -1,14 +1,13 @@
 {
+    "Zepto":{
+        "exports": "$"
+    },
     "smcore": {
         "exports": "smcore"
     },
-    "waypoint":{
-        "deps": ["jquery"],
-        "exports": "$.fn.waypoint"
-    },
     "cookie": {
       "deps": [
-        "jquery"
+        "Zepto"
       ],
       "exports": "$.cookie"
     },

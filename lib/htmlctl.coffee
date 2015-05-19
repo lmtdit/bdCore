@@ -41,7 +41,7 @@ _minhtml = (data)->
         _soure = String(data.contents)
         imgReg = /<img\s[^(src)]*\s*src="([^"]*)"/g
         _soure = _soure.replace imgReg,(str,map)->
-            if map.indexOf('http://') isnt -1
+            if map.indexOf('http://') isnt -1 or  map.indexOf('data:image') isnt -1
                 return str
             else
                 key = map.replace('_img/', '')
