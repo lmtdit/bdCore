@@ -332,18 +332,22 @@ class jsToDist extends jsDepBuilder
                     gutil.log error
         _cb(_num)
 
-    # build all modules to dist
+    # build modules to dist
     init: (cb)=>
         _cb = cb or ->
         _modulesToDev = @modulesToDev
-        _coreModule = @coreModule
         _modulesToDev (num)->
             gutil.log color.cyan(num),"javascript modules combined!"
-            # build core module
-            _coreModule ->
-                gutil.log '\'' + color.cyan("#{config.coreJsName}") + '\'',"combined!"
-                _buildJsDistMap jsHash
-                _cb()
+            _buildJsDistMap jsHash
+            _cb()
+
+    # build core module to dist
+    core: (cb)=>
+        _cb = cb or ->
+        _coreModule = @coreModule
+        _coreModule ->
+            gutil.log '\'' + color.cyan("#{config.coreJsName}") + '\'',"combined!"
+            _cb()
 
 # 外部接口
 exports.bder = jsDepBuilder
