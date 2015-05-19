@@ -77,6 +77,10 @@ gulp.task('js2dist', function() {
   return build.js2dist();
 });
 
+gulp.task('corejs', function() {
+  return build.corejs();
+});
+
 gulp.task('sp', function() {
   return build.sprite();
 });
@@ -184,7 +188,7 @@ gulp.task('default', [], function() {
  * release
  */
 
-gulp.task('release', ['del.dist'], function() {
+gulp.task('release', [], function() {
   return setTimeout(function() {
     return build.sprite(function() {
       return build.less2css(function() {
@@ -210,4 +214,14 @@ gulp.task('release', ['del.dist'], function() {
       });
     });
   }, 100);
+});
+
+
+/*
+ * release
+ */
+
+gulp.task('clean', function() {
+  build.files.delDistFiles();
+  return build.corejs();
 });

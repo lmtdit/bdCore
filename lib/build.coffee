@@ -137,7 +137,7 @@ exports.js2dev = jsToDev
 # 将debug目录中AMD js包文件push到生产目录
 ###
 exports.js2dist = new jsCtl.dist().init
-
+exports.corejs = new jsCtl.dist().core
 
 ###
 # all file to dist

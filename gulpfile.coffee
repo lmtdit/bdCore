@@ -33,6 +33,7 @@ gulp.task 'del.data', ->
 gulp.task 'del.dist', ->
     build.files.delDistFiles()
 
+
 ###
 # build sprite,less,css,js,tpl...
 ###
@@ -50,6 +51,9 @@ gulp.task 'js2dev', ->
 
 gulp.task 'js2dist', ->
     build.js2dist()
+
+gulp.task 'corejs', ->
+    build.corejs()
 
 gulp.task 'sp', ->
     build.sprite()
@@ -132,7 +136,7 @@ gulp.task 'default',[], ->
 ###
 # release
 ###
-gulp.task 'release',['del.dist'], ->
+gulp.task 'release',[], ->
     setTimeout ->
         build.sprite ->
             build.less2css ->
@@ -148,3 +152,9 @@ gulp.task 'release',['del.dist'], ->
                                                     gutil.log color.green 'Finished Release!'
     ,100
 
+###
+# release
+###
+gulp.task 'clean', ->
+    build.files.delDistFiles()
+    build.corejs()

@@ -41,14 +41,20 @@ jsHash = {}
 jsImgRegex = /STATIC_PATH\s*\+\s*(('|")[\s\S]*?(.jpg|.png|.gif)('|"))/g
 
 cssBgMap = {}
+_oldMap = {}
 try
     cssBgMap = JSON.parse fs.readFileSync(path.join(config.mapPath, config.cssBgMap), 'utf8')
+    _oldMap = JSON.parse fs.readFileSync(path.join(config.mapPath, jsDistMapName), 'utf8')
 catch e
     # ...
 
+
+console.log _oldMap
+
 _buildJsDistMap = (map)->
     mapPath = config.mapPath
-    jsonData = JSON.stringify map, null, 2
+    _map = _.assign _oldMap,map
+    jsonData = JSON.stringify _map, null, 2
     not fs.existsSync(mapPath) and butil.mkdirsSync(mapPath)
     fs.writeFileSync path.join(rootPath, mapPath, jsDistMapName), jsonData, 'utf8'
 
@@ -56,7 +62,6 @@ _updateJsDistMap = (newMap)->
     mapPath = config.mapPath
     _newMap = JSON.stringify newMap, null, 2
     not fs.existsSync(mapPath) and butil.mkdirsSync(mapPath)
-    _oldMap = JSON.parse fs.readFileSync(path.join(rootPath, mapPath, jsDistMapName), 'utf8')
     jsonData = _.assign _oldMap,_newMap
     fs.writeFileSync path.join(rootPath, mapPath, jsDistMapName), jsonData, 'utf8' 
 
@@ -337,6 +342,7 @@ class jsToDist extends jsDepBuilder
         _modulesToDev = @modulesToDev
         _modulesToDev (num)->
             gutil.log color.cyan(num),"javascript modules combined!"
+
             _buildJsDistMap jsHash
             _cb()
 
@@ -346,6 +352,7 @@ class jsToDist extends jsDepBuilder
         _coreModule = @coreModule
         _coreModule ->
             gutil.log '\'' + color.cyan("#{config.coreJsName}") + '\'',"combined!"
+            _buildJsDistMap jsHash
             _cb()
 
 # 外部接口
