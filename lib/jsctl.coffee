@@ -42,14 +42,14 @@ jsImgRegex = /STATIC_PATH\s*\+\s*(('|")[\s\S]*?(.jpg|.png|.gif)('|"))/g
 
 cssBgMap = {}
 _oldMap = {}
+
 try
     cssBgMap = JSON.parse fs.readFileSync(path.join(config.mapPath, config.cssBgMap), 'utf8')
     _oldMap = JSON.parse fs.readFileSync(path.join(config.mapPath, jsDistMapName), 'utf8')
 catch e
     # ...
 
-
-console.log _oldMap
+# console.log _oldMap
 
 _buildJsDistMap = (map)->
     mapPath = config.mapPath
