@@ -99,6 +99,10 @@ gulp.task('css', function() {
   });
 });
 
+gulp.task('phpmap', function() {
+  return build.json2php();
+});
+
 
 /*
  * push all files to dist

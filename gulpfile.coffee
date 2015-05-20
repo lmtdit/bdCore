@@ -68,6 +68,9 @@ gulp.task 'css', ->
     build.bgMap ->
         build.css2dist()
 
+gulp.task 'phpmap', -> 
+    build.json2php()
+
 ###
 # push all files to dist
 ###

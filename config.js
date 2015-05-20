@@ -7,7 +7,7 @@
  * @link http://pjg.pw
  * @version $Id$
  */
-var butil, cfg, cndDomain, distPath, htmlTplDist, path, srcPath, st_root, viewsDir;
+var butil, cfg, cndDomain, distPath, path, srcPath, st_root, viewsDir;
 
 path = require('path');
 
@@ -23,8 +23,6 @@ srcPath = cfg.srcPathName;
 
 distPath = cfg.distPathName;
 
-htmlTplDist = cfg.htmlTplDist;
-
 cndDomain = cfg.cndDomain;
 
 module.exports = {
@@ -34,7 +32,8 @@ module.exports = {
   theme: srcPath,
   views: viewsDir,
   htmlTplSrc: path.join("..", srcPath, viewsDir),
-  htmlTplDist: htmlTplDist,
+  htmlTplDist: cfg.htmlTplDist,
+  phpMapPath: cfg.phpMapPath,
   prefix: cfg.jsPrefix,
   hashLength: cfg.hashLength,
   coreJsName: cfg.jsPrefix + cfg.coreJs.name,

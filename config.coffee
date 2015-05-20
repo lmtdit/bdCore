@@ -17,7 +17,7 @@ srcPath = cfg.srcPathName
 distPath = cfg.distPathName
 
 # html模板路径
-htmlTplDist = cfg.htmlTplDist
+# htmlTplDist = cfg.htmlTplDist
 
 # 开发环境下，请求静态资源的域名
 cndDomain = cfg.cndDomain
@@ -36,7 +36,10 @@ module.exports =
   # PHP的模板路径
   views: viewsDir
   htmlTplSrc: path.join "..",srcPath,viewsDir
-  htmlTplDist: htmlTplDist
+  htmlTplDist: cfg.htmlTplDist
+
+  # PHP版本map输出路径
+  phpMapPath: cfg.phpMapPath
 
   # js文件前缀
   prefix: cfg.jsPrefix
