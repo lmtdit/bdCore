@@ -1,0 +1,14 @@
+{
+    "evn":"debug",
+    "isCombo":false,
+    "cndDomain":"local.pcstatics.shenba.com",
+    "srcPathName":"_src",
+    "distPathName":"assets",
+    "htmlTplDist": "../html/",
+    "coreJs":{
+        "mods":["jquery","smcore"],
+        "name":"corelibs"
+    },
+    "jsPrefix":"sb.",
+    "hashLength":10
+}
