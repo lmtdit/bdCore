@@ -137,7 +137,7 @@ gulp.task 'default',[], ->
                                         ,2000
     ,100
 ###
-# release
+# release all
 ###
 gulp.task 'release',[], ->
     setTimeout ->
@@ -157,19 +157,20 @@ gulp.task 'release',[], ->
     ,100
 
 ###
-# release
+# release development
 ###
 gulp.task 'dev',[], ->
     setTimeout ->
         build.sprite ->
             build.less2css ->
                 build.bgMap ->
-                    build.jsLibs ->
-                        build.config ->
-                            build.tpl2dev ->
-                                build.js2dev ->
-                                    build.htmlctl ->
-                                        gutil.log color.green 'Finished Release!'
+                    build.css2dist ->
+                        build.jsLibs ->
+                            build.config ->
+                                build.tpl2dev ->
+                                    build.js2dev ->
+                                        build.htmlctl ->
+                                            gutil.log color.green 'Finished Release!'
     ,100
 
 ###

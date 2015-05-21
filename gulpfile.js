@@ -189,7 +189,7 @@ gulp.task('default', [], function() {
 
 
 /*
- * release
+ * release all
  */
 
 gulp.task('release', [], function() {
@@ -224,7 +224,7 @@ gulp.task('release', [], function() {
 
 
 /*
- * release
+ * release development
  */
 
 gulp.task('dev', [], function() {
@@ -232,12 +232,14 @@ gulp.task('dev', [], function() {
     return build.sprite(function() {
       return build.less2css(function() {
         return build.bgMap(function() {
-          return build.jsLibs(function() {
-            return build.config(function() {
-              return build.tpl2dev(function() {
-                return build.js2dev(function() {
-                  return build.htmlctl(function() {
-                    return gutil.log(color.green('Finished Release!'));
+          return build.css2dist(function() {
+            return build.jsLibs(function() {
+              return build.config(function() {
+                return build.tpl2dev(function() {
+                  return build.js2dev(function() {
+                    return build.htmlctl(function() {
+                      return gutil.log(color.green('Finished Release!'));
+                    });
                   });
                 });
               });
