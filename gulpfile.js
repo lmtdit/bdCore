@@ -205,10 +205,39 @@ gulp.task('release', [], function() {
                     return build.js2dist(function() {
                       return build.json2dist(function() {
                         return build.htmlctl(function() {
-                          return gutil.log(color.green('Finished Release!'));
+                          return build.json2php(function() {
+                            return gutil.log(color.green('Finished Release!'));
+                          });
                         });
                       });
                     });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  }, 100);
+});
+
+
+/*
+ * release
+ */
+
+gulp.task('dev', [], function() {
+  return setTimeout(function() {
+    return build.sprite(function() {
+      return build.less2css(function() {
+        return build.bgMap(function() {
+          return build.jsLibs(function() {
+            return build.config(function() {
+              return build.tpl2dev(function() {
+                return build.js2dev(function() {
+                  return build.htmlctl(function() {
+                    return gutil.log(color.green('Finished Release!'));
                   });
                 });
               });

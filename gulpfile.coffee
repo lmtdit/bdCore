@@ -152,7 +152,24 @@ gulp.task 'release',[], ->
                                         build.js2dist -> 
                                             build.json2dist ->
                                                 build.htmlctl ->
-                                                    gutil.log color.green 'Finished Release!'
+                                                    build.json2php ->
+                                                        gutil.log color.green 'Finished Release!'
+    ,100
+
+###
+# release
+###
+gulp.task 'dev',[], ->
+    setTimeout ->
+        build.sprite ->
+            build.less2css ->
+                build.bgMap ->
+                    build.jsLibs ->
+                        build.config ->
+                            build.tpl2dev ->
+                                build.js2dev ->
+                                    build.htmlctl ->
+                                        gutil.log color.green 'Finished Release!'
     ,100
 
 ###
