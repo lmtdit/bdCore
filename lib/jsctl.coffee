@@ -17,8 +17,8 @@ revall  = require 'gulp-rev-all'
 uglify  = require 'uglify-js'
 # _uglify = require 'gulp-uglify'
 # header  = require 'gulp-header'
-# pkg     = require '../package.json'
-# info    = '/* <%= pkg.name %>@v<%= pkg.version %>, @description <%= pkg.description %>, @author <%= pkg.author.name %>, @blog <%= pkg.author.url %> */\n'
+pkg     = require '../package.json'
+info    = "/**\n *Uglify by #{pkg.name}@v#{pkg.version}\n *@description:#{pkg.description}\n *@author:Pang.J.G\n *@homepage:#{pkg.author.url}\n */\n"
 rjs     = require 'gulp-requirejs'
 plumber = require 'gulp-plumber'
 gutil   = require 'gulp-util'
@@ -28,7 +28,8 @@ errrHandler = butil.errrHandler
 md5         = butil.md5
 jsDistMapName = config.jsDistMapName
 rootPath    = config.rootPath
-GLOBALVAR = config.GLOBALVAR
+
+# console.log info
 
 ### '[ ]'标志符内的依赖字符串转化为数组 ### 
 tryEval = (str)-> 
@@ -79,7 +80,8 @@ _buildJs = (source,outName,cb)->
     _content = amdclean.clean({
             code: _source
             wrap:
-                start: if outName is config.coreJsName then GLOBALVAR else ';(function() {\n'
+                # 不包插入全局变量，改由PHP的init_js函数来实现，以避免不同环境的代码冲突
+                start: if outName is config.coreJsName then '' else  '(function() {\n'
                 end: if outName is config.coreJsName then '' else '\n}());'
         })
     # console.log _content
@@ -89,6 +91,7 @@ _buildJs = (source,outName,cb)->
     # 生成带Hash的生产码
     mangled = uglify.minify _content,{fromString: true}
     _source = mangled.code
+    _source = [info,_source].join(';')
     _hash = md5(_source)
     _distname = outName + '.' + _hash.substring(0,config.hashLength) + '.js'
     _jsHash[outName + ".js"] = 
@@ -234,7 +237,7 @@ class jsToDist extends jsDepBuilder
         _outName = config.coreJsName
         _coreMods = @coreMods
         _include = _.union _coreMods.concat(modules)
-        console.log _include
+        # console.log _include
         _paths = JSON.parse fs.readFileSync(path.join(config.dataPath, 'jslibs.json'), 'utf8')
         _shim = JSON.parse fs.readFileSync(path.join(config.dataPath, 'shim.json'), 'utf8')
         
@@ -342,7 +345,6 @@ class jsToDist extends jsDepBuilder
         _modulesToDev = @modulesToDev
         _modulesToDev (num)->
             gutil.log color.cyan(num),"javascript modules combined!"
-
             _buildJsDistMap jsHash
             _cb()
 

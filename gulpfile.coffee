@@ -13,6 +13,7 @@ build   = require './lib/build'
 config  = require './config'
 gutil   = require 'gulp-util'
 color   = gutil.colors
+Promise = require 'bluebird'
 cp      = require 'child_process'
 exec    = cp.exec
 # git     = require 'gulp-git'
@@ -107,7 +108,6 @@ gulp.task 'tool', ->
         fs.writeFileSync shFile, sh.join('\n')
         fs.chmodSync shFile, '0755'
 
-
 ###
 # watch tasks
 ###
@@ -149,12 +149,36 @@ gulp.task 'release',[], ->
                             build.config ->
                                 build.tpl2dev ->
                                     build.js2dev ->
-                                        build.js2dist -> 
+                                        build.js2dist ->
                                             build.json2dist ->
-                                                build.htmlctl ->
-                                                    build.json2php ->
-                                                        gutil.log color.green 'Finished Release!'
+                                                    build.htmlctl ->
+                                                        build.json2php ->
+                                                            gutil.log color.green 'Finished Release!'
     ,100
+
+
+gulp.task 'test',[], ->
+
+    sp = ->
+        build.sprite ->
+            return Promise.resolve('sp is done')
+
+    sp.then()               
+    js = ->
+        build.jsLibs ->
+            build.config ->
+                return "js libs and config is dong"
+   
+    new Promise(css())
+        .then(js())
+        .then(coreJs())
+        .then(moduleJs())
+        .catch (e)->
+            alertAsync("Exception " + e)
+
+
+    
+
 
 ###
 # release development

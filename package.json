@@ -5,10 +5,9 @@
     "name": "lmtdit",
     "url": "https://github.com/lmtdit/v.builder"
   },
-  "description": "A FrontEnd builder in gulp",
+  "description": "v.builder is a front-end automation construction framework based on gulpJS",
   "main": "gulpfile.js",
   "license": "Apache version 2.0",
-  "homepage": "https://github.com/lmtdit/v.builder",
   "repository": {
     "type": "git",
     "url": "https://github.com/lmtdit/v.builder.git"
@@ -22,6 +21,7 @@
   },
   "devDependencies": {
     "amdclean": "2.7.0",
+    "bluebird": "^2.9.25",
     "concat-stream": "1.4.8",
     "event-stream": "3.3.0",
     "gulp": "^3.8.11",
@@ -47,7 +47,6 @@
   "scripts": {
     "test": "cd build; gulp init"
   },
-  "readme": "ERROR: No README data found!",
   "dependencies": {
     "imagemin": "^3.1.0"
   }

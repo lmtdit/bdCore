@@ -7,7 +7,7 @@
  * @link http://pjg.pw
  * @version $Id$
  */
-var build, color, config, cp, exec, fs, gulp, gutil, path;
+var Promise, build, color, config, cp, exec, fs, gulp, gutil, path;
 
 gulp = require('gulp');
 
@@ -22,6 +22,8 @@ config = require('./config');
 gutil = require('gulp-util');
 
 color = gutil.colors;
+
+Promise = require('bluebird');
 
 cp = require('child_process');
 
@@ -220,6 +222,26 @@ gulp.task('release', [], function() {
       });
     });
   }, 100);
+});
+
+gulp.task('test', [], function() {
+  var js, sp;
+  sp = function() {
+    return build.sprite(function() {
+      return Promise.resolve('sp is done');
+    });
+  };
+  sp.then();
+  js = function() {
+    return build.jsLibs(function() {
+      return build.config(function() {
+        return "js libs and config is dong";
+      });
+    });
+  };
+  return new Promise(css()).then(js()).then(coreJs()).then(moduleJs())["catch"](function(e) {
+    return alertAsync("Exception " + e);
+  });
 });
 
 
