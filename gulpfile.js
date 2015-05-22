@@ -224,26 +224,6 @@ gulp.task('release', [], function() {
   }, 100);
 });
 
-gulp.task('test', [], function() {
-  var js, sp;
-  sp = function() {
-    return build.sprite(function() {
-      return Promise.resolve('sp is done');
-    });
-  };
-  sp.then();
-  js = function() {
-    return build.jsLibs(function() {
-      return build.config(function() {
-        return "js libs and config is dong";
-      });
-    });
-  };
-  return new Promise(css()).then(js()).then(coreJs()).then(moduleJs())["catch"](function(e) {
-    return alertAsync("Exception " + e);
-  });
-});
-
 
 /*
  * release development
@@ -271,6 +251,32 @@ gulp.task('dev', [], function() {
       });
     });
   }, 100);
+});
+
+gulp.task('test', [], function() {
+  var js, sp;
+  sp = function() {
+    build.sprite(function() {
+      return build.less2css(function() {
+        return build.bgMap(function() {});
+      });
+    });
+    return Promise.resolve('sp is done');
+  };
+  js = function(msg) {
+    console.log(msg);
+    build.jsLibs(function() {
+      return build.config(function() {
+        return build.tpl2dev(function() {});
+      });
+    });
+    return "js libs and config is dong";
+  };
+  return sp().then(js).then(function(ee) {
+    return console.log(ee);
+  })["catch"](function(e) {
+    return alertAsync("Exception " + e);
+  });
 });
 
 

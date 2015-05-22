@@ -156,30 +156,6 @@ gulp.task 'release',[], ->
                                                             gutil.log color.green 'Finished Release!'
     ,100
 
-
-gulp.task 'test',[], ->
-
-    sp = ->
-        build.sprite ->
-            return Promise.resolve('sp is done')
-
-    sp.then()               
-    js = ->
-        build.jsLibs ->
-            build.config ->
-                return "js libs and config is dong"
-   
-    new Promise(css())
-        .then(js())
-        .then(coreJs())
-        .then(moduleJs())
-        .catch (e)->
-            alertAsync("Exception " + e)
-
-
-    
-
-
 ###
 # release development
 ###
@@ -197,6 +173,25 @@ gulp.task 'dev',[], ->
                                             gutil.log color.green 'Finished Release!'
     ,100
 
+
+gulp.task 'test',[], ->
+    sp = ->
+        build.sprite ->
+            build.less2css ->
+                build.bgMap ->
+        return Promise.resolve('sp is done')            
+    js = (msg)->
+        console.log msg
+        build.jsLibs ->
+            build.config ->
+                build.tpl2dev ->
+        return "js libs and config is dong"
+
+    sp().then(js)
+        .then (ee)->
+            console.log ee
+        .catch (e)->
+            alertAsync("Exception " + e)
 ###
 # release
 ###
