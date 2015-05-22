@@ -11,16 +11,19 @@ path    = require 'path'
 config  = require '../config'
 gutil   = require 'gulp-util'
 
-jsMapName   = config.jsMapName
-cssMapName  = config.cssMapName
+
+jsMap = {}
+cssMap = {}
+bgMap = {}
 
 try
-    jsMap       = JSON.parse fs.readFileSync(path.join(config.mapPath, jsMapName), 'utf8') or {}
-    oldJsMap    = JSON.parse fs.readFileSync(path.join(config.mapPath, "old_" + jsMapName), 'utf8') or {}
-    cssMap      = JSON.parse fs.readFileSync(path.join(config.mapPath, cssMapName), 'utf8') or {}
-    oldCssMap   = JSON.parse fs.readFileSync(path.join(config.mapPath, "old_" + cssMapName), 'utf8') or {}
+    jsMap = JSON.parse fs.readFileSync(path.join(config.mapPath, config.jsLibsMapName), 'utf8')
+    cssMap = JSON.parse fs.readFileSync(path.join(config.mapPath, config.cssMapName), 'utf8')
+    bgMap = JSON.parse fs.readFileSync(path.join(config.mapPath, config.cssBgMap), 'utf8')
 catch e
     # ...
+    # cssBgMap
+    # jsLibsMapName
 
 
 ###生产文件的控制基类###
@@ -56,22 +59,21 @@ class filesController
             _list = @getList()
             _new_list = []
             if _ext isnt ".js" and _ext isnt ".css"
+
                 return _list
             else
                 _temp = []
                 _curMap = if _ext is '.js' then jsMap else cssMap
-                _oldMap = if _ext is '.js' then oldJsMap else oldCssMap
-
+                # console.log _curMap
                 for file,val of _curMap
-                    _temp.push val
-                for file,val of _oldMap
-                    _temp.push val if val not in _temp
+                    _temp.push file
+                    _temp.push val.distname
 
                 for file in _list
-                    _file = "/" + file
-                    if _file not in _temp
+                    if file not in _temp
                         _new_list.push file
                 return _new_list
+
         catch e
             # ...
     # 删除文件
@@ -79,11 +81,14 @@ class filesController
         try
             _ext = @ext
             _list = @checkList()
-            return false if _list.length == 0 
+            console.log _list
+            if _list.length == 0 
+                console.log "Nothing need delete!"
+                return false
             _path = @path()
             for f in _list
                 _file = path.join(_path, f)
-                # gutil.log _file
+                gutil.log "delete --> #{_file}"
                 fs.unlinkSync _file
         catch e
     # 清空Map
