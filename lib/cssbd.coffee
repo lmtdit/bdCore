@@ -52,11 +52,15 @@ _pngsToOneImg = (floder,callback) ->
     spriteData = gulp.src(_pngSrc).pipe(sprite(option))
 
     try 
-        spriteData.img.pipe gulp.dest(config.spriteImgOutPath)
-            .on 'end',->
-                spriteData.css.pipe gulp.dest(config.spriteLessOutPath)
-                    .on 'end',->                                                            
-                        callback()
+        spriteData.img.on 'data',(res)->
+            _source = res.contents
+            _path = path.join config.spriteImgOutPath,res.path
+            fs.writeFileSync _path, _source, 'utf8'
+            spriteData.css.on 'data',(res)->
+                _source = res.contents
+                _path = path.join config.spriteLessOutPath,res.path
+                fs.writeFileSync _path, _source, 'utf8'
+                callback()
     catch error
             gutil.log "Error: #{_sp_png}"
             gutil.log error
@@ -103,11 +107,12 @@ _spToLess = (type,cb)->
         for folder in _newBuildFolders
             _pngsToOneImg folder, ->
                 _num++
-                _num%10 == 1 and gutil.log 'Waitting...'
+                _num%10 == 5 and gutil.log 'Waitting...'
                 if _num == total
+                    console.log 'Sprite IMG and LESS build success!'
                     _buildMap -> 
-                    	gutil.log color.green 'Sprite IMG and LESS build success'
-                    	_cb()
+                        gutil.log color.green 'Sprite map build success'
+                       _cb()
 
 ###
 # 从less生成css源码

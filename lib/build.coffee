@@ -136,21 +136,12 @@ exports.js2dev = jsToDev
 ###
 # 将debug目录中AMD js包文件push到生产目录
 ###
-exports.js2dist = new jsCtl.dist().init
-exports.corejs = new jsCtl.dist().core
+_jsCtl = new jsCtl.dist()
+exports.js2dist = _jsCtl.init
+exports.corejs = _jsCtl.core
+exports.noamd = _jsCtl.noamd
 
-###
-# all file to dist
-###
-exports.all2dist = (cb)->
-    _cb = cb or ->
-    exports.css2dist ->
-        gutil.log color.green 'CSS pushed!'
-        exports.js2dist ->
-            gutil.log color.green 'JS pushed!'
-            # exports.json2php ->
-            #     gutil.log color.green 'phpMap done!!!!!!!!!'
-            _cb()
+
 
 # 将静态资源注入到php模板文件中
 exports.htmlctl = htmlCtl
@@ -165,3 +156,41 @@ exports.json2php = require('./json2php')
 # Auto watch API
 ###
 exports.autowatch = autowatch
+
+###
+# build CSS to cache
+###
+exports.less = (cb)->
+    _cb = cb or ->
+    exports.sprite ->
+        exports.less2css ->
+            exports.bgMap -> _cb()
+
+###
+# build JS to cache
+###
+exports.js = (cb)->
+    _cb = cb or ->
+    exports.jsLibs ->
+        exports.config ->
+            exports.tpl2dev ->
+                exports.js2dev -> _cb()
+###
+# css and js file to dist
+###
+exports.all2dist = (cb)->
+    _cb = cb or ->
+    exports.css2dist ->
+        gutil.log color.green 'CSS pushed!'
+        exports.js2dist ->
+            exports.noamd ->
+                gutil.log color.green 'JS pushed!'
+                _cb()
+###
+# build html and map
+###
+exports.demoAndMap = (cb)->
+    _cb = cb or ->         
+    exports.htmlctl ->
+        exports.json2dist ->
+            exports.json2php -> _cb()

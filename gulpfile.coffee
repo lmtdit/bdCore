@@ -1,5 +1,4 @@
 ###
-#
 # @date 2014-12-2 15:57:21
 # @author pjg <iampjg@gmail.com>
 # @link http://pjg.pw
@@ -16,7 +15,7 @@ color   = gutil.colors
 Promise = require 'bluebird'
 cp      = require 'child_process'
 exec    = cp.exec
-# git     = require 'gulp-git'
+git     = require 'gulp-git'
 
 ###
 # Initialization program
@@ -41,6 +40,9 @@ gulp.task 'del.dist', ->
 gulp.task 'jslibs', -> 
     build.jsLibs()
 
+gulp.task 'jspaths', -> 
+    build.jsPaths()
+
 gulp.task 'cfg', ->
     build.config()
 
@@ -51,12 +53,16 @@ gulp.task 'js2dev', ->
     build.js2dev()
 
 gulp.task 'js2dist', ->
-    build.js2dist()
+    build.js2dist ->
+        build.noamd ->
+
+gulp.task 'noamd', ->
+    build.noamd()
 
 gulp.task 'corejs', ->
     build.corejs()
 
-gulp.task 'sp', ->
+gulp.task 'sprite', ->
     build.sprite()
 
 gulp.task 'bgmap', -> 
@@ -69,24 +75,21 @@ gulp.task 'css', ->
     build.bgMap ->
         build.css2dist()
 
-gulp.task 'phpmap', -> 
-    build.json2php()
+gulp.task 'map', ->
+    build.json2dist ->
+        build.json2php()
 
 ###
 # push all files to dist
 ###
 
-gulp.task 'all2dist', ->
+gulp.task 'all', ->
     build.all2dist()
 
-gulp.task 'map2dist', ->
-    build.json2dist ->
-       
-
 ###
-# Injecting static files relative to PHP-tpl files
+# html demo files
 ###
-gulp.task 'html2dist', ->
+gulp.task 'html', ->
     build.htmlctl()
 
 ###
@@ -98,13 +101,13 @@ gulp.task 'tool', ->
     if disk != '/' 
         cmd = [disk + ':']
         cmd.push 'cd ' + rootPath
-        cmd.push 'start gulp dev'
+        cmd.push 'start gulp'
         fs.writeFileSync(path.join(__dirname,'..','startGulp.cmd'), cmd.join('\r\n'))
     else 
         sh = ['#!/bin/sh']
         shFile = path.join __dirname,'..','startGulp.sh'
         sh.push 'cd ' + __dirname
-        sh.push 'gulp dev'
+        sh.push 'gulp'
         fs.writeFileSync shFile, sh.join('\n')
         fs.chmodSync shFile, '0755'
 
@@ -113,88 +116,66 @@ gulp.task 'tool', ->
 ###
 gulp.task 'watch', ->
     build.autowatch ->
-        # clearTimeout _distTimer if _distTimer
-        # _distTimer = setTimeout ->
-        #     # build.all2dist ->
-        #         # gulp.start ['git']
-        # ,10000
+        clearTimeout _gitTimer if _gitTimer
+        _gitTimer = setTimeout ->
+            rootPath = path.join __dirname
+            disk = rootPath.split('')[0]
+            if disk != '/' 
+                exec 'cmd ./bin/autogit.bat',(error, stdout, stderr)->
+                    console.log stdout
+            else
+                exec 'sh ./bin/autogit.sh',(error, stdout, stderr)->
+                    console.log stdout
+        ,3000
 
-###
-# dev task
-###
-gulp.task 'default',[], ->
-    setTimeout ->
-        build.sprite ->
-            build.less2css ->
-                build.bgMap ->
-                    build.jsLibs ->
-                        build.config ->
-                            build.tpl2dev ->
-                                build.js2dev ->
-                                    build.htmlctl ->
-                                        setTimeout ->
-                                            gulp.start ['watch']
-                                        ,2000
-    ,100
-###
-# release all
-###
-gulp.task 'release',[], ->
-    setTimeout ->
-        build.sprite ->
-            build.less2css ->
-                build.bgMap ->
-                    build.css2dist ->
-                        build.jsLibs ->
-                            build.config ->
-                                build.tpl2dev ->
-                                    build.js2dev ->
-                                        build.js2dist ->
-                                            build.json2dist ->
-                                                build.htmlctl ->
-                                                    build.json2php ->
-                                                        gutil.log color.green 'Finished Release!'
-    ,100
-
-###
-# release development
-###
-gulp.task 'dev',[], ->
-    setTimeout ->
-        build.sprite ->
-            build.less2css ->
-                build.bgMap ->
-                    build.css2dist ->
-                        build.jsLibs ->
-                            build.config ->
-                                build.tpl2dev ->
-                                    build.js2dev ->
-                                        build.htmlctl ->
-                                            gutil.log color.green 'Finished Release!'
-    ,100
-
-
-gulp.task 'test',[], ->
-    sp = ->
-        build.sprite ->
-            build.less2css ->
-                build.bgMap ->
-        return Promise.resolve('sp is done')            
-    js = (msg)->
-        console.log msg
-        build.jsLibs ->
-            build.config ->
-                build.tpl2dev ->
-        return "js libs and config is dong"
-
-    sp().then(js)
-        .then (ee)->
-            console.log ee
-        .catch (e)->
-            alertAsync("Exception " + e)
 ###
 # release
 ###
 gulp.task 'clean', ->
     build.files.delDistFiles()
     build.corejs()
+
+###
+# dev task
+###
+gulp.task 'default',[], ->
+    setTimeout ->
+        build.less ->
+            build.js ->
+                build.htmlctl ->
+                    clearTimeout _Timer if _Timer
+                    _Timer = setTimeout ->
+                        gulp.start ['watch']
+                    ,2000
+    ,100
+
+###
+# release all
+###
+gulp.task 'release',[], ->
+    setTimeout ->
+        build.less ->
+            build.js ->
+                build.all2dist ->
+                    build.demoAndMap ->
+                        gutil.log color.green 'Release finished!'
+    ,100
+
+
+###
+gulp.task 'test', ->
+    clearTimeout _gitTimer if _gitTimer
+    _gitTimer = setTimeout ->
+        rootPath = path.join __dirname
+        disk = rootPath.split('')[0]
+        if disk != '/' 
+            exec 'cmd ./bin/autogit.bat',(error, stdout, stderr)->
+                console.log stdout
+                console.log stderr
+        else
+            console.log 'mac'
+            exec 'sh ./bin/autogit.sh',(error, stdout, stderr)->
+                console.log stdout
+                console.log stderr
+    ,3000
+###        

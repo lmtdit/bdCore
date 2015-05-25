@@ -1,5 +1,5 @@
 ###*
-# AMD模块依赖表的构建类
+# js生产文件构建类库
 # @date 2014-12-2 15:10:14
 # @author pjg <iampjg@gmail.com>
 # @link http://pjg.pw
@@ -332,7 +332,7 @@ class jsToDist extends jsDepBuilder
                     _source = String(_jsData.join(''))
                     _buildJs _source,_outName,(map)->
                         gutil.log "Combine",color.cyan("'#{module}'"),"---> #{_outName}"
-                        _.assign jsHash,map
+                        jsHash = _.assign jsHash,map
                     _num++
                 catch error
                     gutil.log "Error: #{_outName}"
@@ -356,6 +356,22 @@ class jsToDist extends jsDepBuilder
             gutil.log '\'' + color.cyan("#{config.coreJsName}") + '\'',"combined!"
             _buildJsDistMap jsHash
             _cb()
+
+    # 处理非AMD模块的js，并生成map
+    noamd: (cb)=>
+        _cb = cb or ->
+        _srcPath = @srcPath
+        fs.readdirSync(_srcPath).forEach (v)->
+            _jsFile = path.join(_srcPath, v)
+            if fs.statSync(_jsFile).isFile() and v.indexOf('config.') isnt 0 and v.indexOf('.') isnt 0
+                console.log _jsFile
+                _source = fs.readFileSync(_jsFile, 'utf8')
+                _outName = v.replace('.js','')
+                _buildJs _source,_outName,(map)->
+                    jsHash = _.assign jsHash,map
+                    _buildJsDistMap jsHash
+                    _cb()
+
 
 # 外部接口
 exports.bder = jsDepBuilder

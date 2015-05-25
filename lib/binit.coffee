@@ -22,7 +22,7 @@ mapPath     = config.mapPath
 Imagemin = require('imagemin')
 
 ###
-# init dist, cache and watch DIRS
+# init dist and cache DIRS
 ###
 exports.dir = ->
     init_dir = [
@@ -95,6 +95,7 @@ exports.bgmap = (cb)->
                 _map[_name].hash = _hash
                 _map[_name].distname = _distname.replace(/\\\\/g,'/')
                                                 .replace(/\\/g,'/')
+
                 _imgmin = new Imagemin()
                     .src(sub_Path)
                     .dest(config.imgDistPath)
@@ -125,7 +126,7 @@ exports.paths = (ext,cb)->
         _cb = cb or ->
     
     _map = {}
-    _jsPath = path.join config.rootPath, config.jsSrcPath
+    _jsPath = path.join config.rootPath, config.jsOutPath
     _cssPath = path.join config.rootPath, config.cssOutPath
     _path = if _ext is '.js' then _jsPath else _cssPath
     _mapName = if _ext is '.js' then config.jsMapName else config.cssMapName

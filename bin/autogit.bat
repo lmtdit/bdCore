@@ -1,9 +1,4 @@
-# !/bin/sh
-# !/bin/bash
-
-
 cd ..
-pwd
 # ls
 git pull
 git add ./_src/js

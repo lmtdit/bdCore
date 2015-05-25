@@ -1,5 +1,5 @@
 ###*
-# js生产文件构建类
+# Build AMDmodule with ID
 # @date 2014-12-2 15:10:14
 # @author pjg <iampjg@gmail.com>
 # @link http://pjg.pw
@@ -16,9 +16,9 @@ gutil   = require 'gulp-util'
 uglify  = require 'gulp-uglify'
 plumber = require 'gulp-plumber'
 # rename  = require 'gulp-rename'
-header  = require 'gulp-header'
-pkg     = require '../package.json'
-info    = '/* <%= pkg.name %>@v<%= pkg.version %>, @author <%= pkg.author.name %>, @blog <%= pkg.author.url %> */\n'
+# header  = require 'gulp-header'
+# pkg     = require '../package.json'
+# info    = '/* <%= pkg.name %>@v<%= pkg.version %>, @author <%= pkg.author.name %>, @blog <%= pkg.author.url %> */\n'
 
 color = gutil.colors
 
@@ -85,11 +85,10 @@ arrToString = (arr)->
             _str += (if n > 0 then "," else "") + "'#{val}'"
     return "[#{_str}]"
 
+# 给匿名AMD模块添加ID
 _stream = (files,cb,cb2)->
     gulp.src [files]
     .pipe plumber({errorHandler: errrHandler})
-    # .pipe uglify()
-    # .pipe header(info, { pkg : pkg })
     .on 'data',(source)->
         _list = []
         _filePath = source.path.replace(/\\/g,'/')
@@ -118,7 +117,7 @@ _stream = (files,cb,cb2)->
         cb(_nameObj,_source)
     .on 'end',cb2
 
-# 生成js的生产文件
+# 文件写入磁盘
 _buildJs = (name,source)->
     _file = path.join(_jsDevPath, name)
     butil.mkdirsSync(path.dirname(_file))
@@ -128,7 +127,7 @@ _buildJs = (name,source)->
 _buildPaths = binit.paths
 
 ###
-# js生产文件构建函数
+# Build AMDmodule with ID
 # @param {string} file 同gulp.src接口所接收的参数，默认是js debug目录中的所有js文件
 # @param {function} done 回调函数
 ###
