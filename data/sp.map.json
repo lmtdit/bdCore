@@ -140,12 +140,15 @@
         "cart-no.png",
         "date-off.png",
         "date-on.png",
+        "del.png",
         "flow-off.png",
         "flow-on.png",
         "grey-block-active.png",
         "grey-block.png",
+        "share.png",
         "star1.png",
-        "star2.png"
+        "star2.png",
+        "time.png"
     ],
     "minifoot": [
         "foot-ser1.png",
