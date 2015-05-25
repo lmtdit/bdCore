@@ -69,6 +69,10 @@ _updateJsDistMap = (newMap)->
 _buildJs = (source,outName,cb)->
     _jsHash = {}
     outPath = path.join rootPath, config.jsDistPath
+
+    # 排除封装闭包的模块
+    _exclude = [config.coreJsName,'piwik']
+    
     not fs.existsSync(outPath) and butil.mkdirsSync(outPath)
     _source = source.replace jsImgRegex,(str,map)->
         key = map.replace(/(^\'|\")|(\'|\"$)/g, '')
@@ -81,8 +85,8 @@ _buildJs = (source,outName,cb)->
             code: _source
             wrap:
                 # 不包插入全局变量，改由PHP的init_js函数来实现，以避免不同环境的代码冲突
-                start: if outName is config.coreJsName then '' else  '(function() {\n'
-                end: if outName is config.coreJsName then '' else '\n}());'
+                start: if outName in _exclude then '' else  '(function() {\n'
+                end: if outName in _exclude then '' else '\n}());'
         })
     # console.log _content
     # 生成combo后的源码
