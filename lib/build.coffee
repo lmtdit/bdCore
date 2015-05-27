@@ -164,7 +164,8 @@ exports.less = (cb)->
     _cb = cb or ->
     exports.sprite ->
         exports.less2css ->
-            exports.bgMap -> _cb()
+            exports.bgMap -> 
+                    _cb()
 
 ###
 # build JS to cache

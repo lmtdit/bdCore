@@ -82,12 +82,12 @@ _buildJs = (source,outName,cb)->
                   .replace('/_img/', '/img/')
         return _str
     _content = amdclean.clean({
-            code: _source
-            wrap:
-                # 不包插入全局变量，改由PHP的init_js函数来实现，以避免不同环境的代码冲突
-                start: if outName in _exclude then '' else  '(function() {\n'
-                end: if outName in _exclude then '' else '\n}());'
-        })
+        code: _source
+        wrap:
+            # 不包插入全局变量，改由PHP的init_js函数来实现，以避免不同环境的代码冲突
+            start: if outName in _exclude then '' else  '(function() {\n'
+            end: if outName in _exclude then '' else '\n}());'
+    })
     # console.log _content
     # 生成combo后的源码
     
@@ -367,14 +367,14 @@ class jsToDist extends jsDepBuilder
         _srcPath = @srcPath
         fs.readdirSync(_srcPath).forEach (v)->
             _jsFile = path.join(_srcPath, v)
-            if fs.statSync(_jsFile).isFile() and v.indexOf('config.') isnt 0 and v.indexOf('.') isnt 0
+            if fs.statSync(_jsFile).isFile() and v.indexOf('.') isnt 0
                 # console.log _jsFile
                 _source = fs.readFileSync(_jsFile, 'utf8')
                 _outName = v.replace('.js','')
                 _buildJs _source,_outName,(map)->
                     jsHash = _.assign jsHash,map
                     _buildJsDistMap jsHash
-                    _cb()
+        _cb()
 
 
 # 外部接口

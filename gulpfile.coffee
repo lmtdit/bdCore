@@ -12,10 +12,10 @@ build   = require './lib/build'
 config  = require './config'
 gutil   = require 'gulp-util'
 color   = gutil.colors
-Promise = require 'bluebird'
+# Promise = require 'bluebird'
 cp      = require 'child_process'
 exec    = cp.exec
-git     = require 'gulp-git'
+# git     = require 'gulp-git'
 
 ###
 # Initialization program
@@ -156,9 +156,11 @@ gulp.task 'release',[], ->
     setTimeout ->
         build.less ->
             build.js ->
-                build.all2dist ->
-                    build.demoAndMap ->
-                        gutil.log color.green 'Release finished!'
+                build.css2dist ->
+                    build.js2dist ->
+                        build.noamd ->
+                            build.demoAndMap ->
+                                gutil.log color.green 'Release finished!'
     ,100
 
 

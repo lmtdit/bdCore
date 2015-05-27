@@ -6,7 +6,7 @@
  * @link http://pjg.pw
  * @version $Id$
  */
-var Promise, build, color, config, cp, exec, fs, git, gulp, gutil, path;
+var build, color, config, cp, exec, fs, gulp, gutil, path;
 
 gulp = require('gulp');
 
@@ -22,13 +22,9 @@ gutil = require('gulp-util');
 
 color = gutil.colors;
 
-Promise = require('bluebird');
-
 cp = require('child_process');
 
 exec = cp.exec;
-
-git = require('gulp-git');
 
 
 /*
@@ -230,9 +226,13 @@ gulp.task('release', [], function() {
   return setTimeout(function() {
     return build.less(function() {
       return build.js(function() {
-        return build.all2dist(function() {
-          return build.demoAndMap(function() {
-            return gutil.log(color.green('Release finished!'));
+        return build.css2dist(function() {
+          return build.js2dist(function() {
+            return build.noamd(function() {
+              return build.demoAndMap(function() {
+                return gutil.log(color.green('Release finished!'));
+              });
+            });
           });
         });
       });
