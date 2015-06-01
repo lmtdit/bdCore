@@ -222,22 +222,31 @@ gulp.task('default', [], function() {
  * release all
  */
 
+
+/*
+ * release all
+ */
+
 gulp.task('release', [], function() {
-  return setTimeout(function() {
-    return build.less(function() {
-      return build.js(function() {
-        return build.css2dist(function() {
-          return build.js2dist(function() {
+  return build.less(function() {
+    return build.bgMap(function() {
+      return build.css2dist(function() {
+        return build.js(function() {
+          return build.corejs(function() {
             return build.noamd(function() {
-              return build.demoAndMap(function() {
-                return gutil.log(color.green('Release finished!'));
+              return build.js2dist(function() {
+                return build.htmlctl(function() {
+                  return build.json2php(function() {
+                    return gutil.log(color.green('Release finished!'));
+                  });
+                });
               });
             });
           });
         });
       });
     });
-  }, 100);
+  });
 });
 
 
