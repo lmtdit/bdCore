@@ -1,7 +1,7 @@
 {
     "evn":"debug",
     "isCombo":false,
-    "cndDomain":"pcstatics.shenba.com",
+    "cndDomain":"rc.pcstatics.shenba.com",
     "srcPathName":"_src",
     "distPathName":"assets",
     "htmlTplDist": "../html/",
