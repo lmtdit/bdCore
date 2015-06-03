@@ -8,61 +8,53 @@ _       = require 'lodash'
 gulp    = require 'gulp'
 plumber = require 'gulp-plumber'
 gutil   = require 'gulp-util'
-config  = require '../config'
+config  = require './config'
 butil   = require './butil'
 getJSONSync = butil.getJSONSync
 errrHandler = butil.errrHandler
 color   = gutil.colors
 include = require './include'
+common  = require './common'
 minifyHTML = require('gulp-minify-html')
 
-cssBgMap = {}
-jsmap = {}
-jsdistmap = {}
-cssmap = {}
+# cssBgMap = {}
+# jsmap = {}
+# jsdistmap = {}
+# cssmap = {}
 
-try
-    cssBgMap    = getJSONSync path.join(config.mapPath, config.cssBgMap)
-    jsmap       = getJSONSync path.join(config.mapPath,config.jsMapName)
-    jsdistmap   = getJSONSync path.join(config.mapPath,config.jsDistMapName)
-    cssmap      = getJSONSync path.join(config.mapPath,config.cssMapName)
-catch e
-    # ...
-hashMaps = butil.objMixin jsmap,jsdistmap,cssmap
-imgRoot = config.staticRoot + config.imgDistPath.replace('../','')
+# # 环境判断
+# env     = config.env
+# isDebug = config.isDebug
 
-# 压缩html
-_minhtml = (data)->
+# try
+#     cssBgMap    = getJSONSync path.join(config.mapPath, config.cssBgMap)
+#     jsdistmap   = getJSONSync path.join(config.mapPath,config.jsDistMapName)
+#     cssmap      = getJSONSync path.join(config.mapPath,config.cssMapName)
+# catch e
+#     # ...
+
+_hashMaps = common.hashMaps
+_replaceImg = common.replaceImg
+_htmlMinify = common.htmlMinify
+
+# 构建html模板
+_buildHtml = (data)->
     try
         _path = String(data.path).replace(/\\/g,'/')
         return false if _path.indexOf("/#{config.views}_") > -1
-        _name = _path.split("/#{config.theme}/#{config.views}")[1]
+        _name = _path.split("/#{config.srcPath}/#{config.views}")[1]
         _outputPath = path.join(config.htmlTplDist, _name)
-        _soure = String(data.contents)
-        imgReg = /<img\s[^(src)]*\s*src="([^"]*)"/g
-        _soure = _soure.replace imgReg,(str,map)->
-            if map.indexOf('http://') isnt -1 or  map.indexOf('data:image') isnt -1
-                return str
-            else
-                key = map.replace('_img/', '')
-                         .replace(/(^\'|\")|(\'|\"$)/g, '')
-                val = imgRoot + (if _.has(cssBgMap,key) then cssBgMap[key].distname else key + '?=t' + String(new Date().getTime()).substr(0,8))
-                return str.replace(map, val)
 
-        if config.evn isnt 'dev' and config.evn isnt 'debug'
-            gutil.log color.cyan("\'" + _name + "\'"),"combined."
-            _soure = _soure.replace(/\/\*([\s\S]*?)\*\//g, '')
-                           .replace(/^\s+$/g, '')
-                           # .replace(/\n/g, '')
-                           .replace(/\t/g, '')
-                           # .replace(/\r/g, '')
-                           # .replace(/\n\s+/g, ' ')
-                           # .replace(/\s+/g, ' ')
-                           # .replace(/>([\n\s+]*?)</g,'><')
-                           
+        # 给html中的图片链接加上Hash
+        _source = _replaceImg(String(data.contents))
+
+        # 如果不是开发环境，则压缩html
+        if config.env isnt 'local'
+            _source = _htmlMinify(_source)
+            gutil.log color.cyan("'#{_name}'"),"combined."
                            
         butil.mkdirsSync(path.dirname(_outputPath))
-        fs.writeFileSync path.join(_outputPath), _soure, 'utf8'
+        fs.writeFileSync path.join(_outputPath), _source, 'utf8'
     catch e
         console.log e
 
@@ -79,9 +71,6 @@ module.exports = (file,cb)->
     opts = 
         prefix: '@@'
         basepath: '@file'
-        evn: config.evn
-        isCombo: config.isCombo
-        staticRoot: config.staticRoot
         staticPaths:
             css:
                 src: config.cssOutPath
@@ -89,7 +78,7 @@ module.exports = (file,cb)->
             js:
                 src: config.jsOutPath
                 dist: config.jsDistPath
-        hashmap: hashMaps
+        hashmap: _hashMaps
         # context:
         #     combo_css: true
         #     combo_js: true
@@ -98,9 +87,8 @@ module.exports = (file,cb)->
         .pipe plumber({errorHandler: errrHandler})
         .pipe include(opts)
         # .pipe minifyHTML()
-        .on "data",(data)->
-            _minhtml(data)   
+        .on "data",(_data)->
+            _buildHtml(_data)
         .on "end",->
             gutil.log color.green "Html templates done!"
             cb()
-

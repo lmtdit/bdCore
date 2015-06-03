@@ -149,7 +149,7 @@ Tools.getJSON = (url, callback, errback)->
 Tools.deepDo = (list, deepFunc, cumulateFunc, callback, deep)->
     deep = deep or 0
     if not list[deep]
-        callback() if callback
+        callback && callback()
         return
     
     deepFunc list[deep], (result)->
@@ -159,7 +159,7 @@ Tools.deepDo = (list, deepFunc, cumulateFunc, callback, deep)->
         if deep + 1 < list.length
             Tools.deepDo(list, deepFunc, cumulateFunc, callback, deep + 1)
         else 
-            callback() if callback
+            callback && callback() 
 
 # 执行命令
 Tools.exec = (command, callback)->
@@ -172,7 +172,7 @@ Tools.exec = (command, callback)->
         if error
             console.log('exec error: ' + error)
         # console.log(command + ' 执行完毕！')
-        callback() if callback
+        callback && callback() 
 
 
 module.exports = Tools

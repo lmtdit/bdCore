@@ -8,7 +8,7 @@
 
 fs      = require 'fs'
 path    = require 'path'
-config  = require '../config'
+config  = require './config'
 # flctl   = require './flctl'
 _       = require 'lodash'
 amdclean = require 'amdclean'
@@ -69,10 +69,6 @@ _updateJsDistMap = (newMap)->
 _buildJs = (source,outName,cb)->
     _jsHash = {}
     outPath = path.join rootPath, config.jsDistPath
-
-    # 排除封装闭包的模块
-    _exclude = [config.coreJsName,'piwik']
-    
     not fs.existsSync(outPath) and butil.mkdirsSync(outPath)
     _source = source.replace jsImgRegex,(str,map)->
         key = map.replace(/(^\'|\")|(\'|\"$)/g, '')
@@ -82,12 +78,12 @@ _buildJs = (source,outName,cb)->
                   .replace('/_img/', '/img/')
         return _str
     _content = amdclean.clean({
-        code: _source
-        wrap:
-            # 不包插入全局变量，改由PHP的init_js函数来实现，以避免不同环境的代码冲突
-            start: if outName in _exclude then '' else  '(function() {\n'
-            end: if outName in _exclude then '' else '\n}());'
-    })
+            code: _source
+            wrap:
+                # 不包插入全局变量，改由PHP的init_js函数来实现，以避免不同环境的代码冲突
+                start: if outName is config.coreJsName then '' else  ''
+                end: if outName is config.coreJsName then '' else ''
+        })
     # console.log _content
     # 生成combo后的源码
     
@@ -101,9 +97,9 @@ _buildJs = (source,outName,cb)->
     _jsHash[outName + ".js"] = 
         hash: _hash
         distname: _distname
-    _devPath = path.join outPath, _distname
+    _distPath = path.join outPath, _distname
     fs.writeFileSync _oldPath, _source, 'utf8'
-    fs.writeFileSync _devPath, _source, 'utf8'
+    !config.isDebug && fs.writeFileSync _distPath, _source, 'utf8'
     cb(_jsHash)
 
 ### 过滤依赖表里的关键词，排除空依赖 ### 
@@ -311,7 +307,7 @@ class jsToDist extends jsDepBuilder
         _cb = cb or ->
         _srcPath = @srcPath
         _allDeps = @makeDeps().allDeps
-        # console.log _allDeps
+        # console.log _cfg
         _depList = _allDeps.modList
         # 生成依赖
         _num = 0

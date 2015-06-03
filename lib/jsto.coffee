@@ -10,7 +10,7 @@ fs      = require 'fs'
 path    = require 'path'
 _       = require 'lodash'
 amdclean = require 'amdclean'
-config  = require '../config'
+config  = require './config'
 gulp    = require 'gulp'
 gutil   = require 'gulp-util'
 uglify  = require 'gulp-uglify'
@@ -148,7 +148,7 @@ module.exports = (file,done)->
             # _distname = obj.name + (if not _isCombo then  '.' + obj.hash.substr(0,_hashLen) else '' ) + obj.ext
             _distname = obj.name + obj.ext
             _dir && (_distname = _dir + '/' + _distname)
-            if _num%5 == 0 and _num > 4
+            if _num%20 == 0 and _num > 15
                 gutil.log 'Building...'
             _buildJs _distname,_source
             _num++

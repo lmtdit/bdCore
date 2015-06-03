@@ -8,7 +8,7 @@
 
 fs      = require 'fs'
 path    = require 'path'
-config  = require '../config'
+config  = require './config'
 _       = require 'lodash'
 ###
 #上一次构建的雪碧图Map和hash
