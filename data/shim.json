@@ -1,0 +1,17 @@
+{
+    "Zepto":{
+        "exports": "$"
+    },
+    "smcore": {
+        "exports": "smcore"
+    },
+    "cookie": {
+      "deps": [
+        "Zepto"
+      ],
+      "exports": "$.cookie"
+    },
+    "underscore":{
+        "exports": "_"
+    }
+}

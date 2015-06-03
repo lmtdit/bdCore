@@ -1,0 +1,15 @@
+{
+    "evn":"debug",
+    "isCombo":false,
+    "cndDomain":"rc.pcstatics.shenba.com",
+    "srcPathName":"_src",
+    "distPathName":"assets",
+    "htmlTplDist": "../html/",
+    "phpMapPath":"../../../shenba_php/shenba/map/",
+    "coreJs":{
+        "mods":["jquery","smcore"],
+        "name":"corelibs"
+    },
+    "jsPrefix":"sb.",
+    "hashLength":10
+}
