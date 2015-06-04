@@ -203,24 +203,14 @@ exports.cfg = (cb)->
     for key,val of jsLibPaths
         if key isnt 'require' and key isnt 'almond'
             newPaths[key] = val
-
-    rCfg_dev =
-        baseUrl: config.staticPath + 'js'
-        paths: _.extend newPaths,jsPaths
-        shim: shimData
-
     rCfg =
-        baseUrl: config.staticPath + '_js'
+        baseUrl: config.staticRoot + '_src/_js'
         paths: _.extend newPaths,jsPaths
         shim: shimData
-
+        
     jsSrcPath = config.jsSrcPath
-    
-    configStr = "#{config.GLOBALVAR}"
     require_cfg = "require.config(#{JSON.stringify(rCfg, null, 2)});"
-
     fs.writeFileSync path.join(jsSrcPath, "require_cfg.js"), require_cfg, 'utf8'
-    fs.writeFileSync path.join(jsSrcPath, "config.js"), configStr, 'utf8'
 
     gutil.log color.green "config build success!"
     _cb()
