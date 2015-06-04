@@ -13,9 +13,6 @@
     },
     "jsPrefix": "sb.",
     "hashLength": 10,
-    "pagesize": 10,
-    "AndroidAppUrl": "",
-    "iosAppUrl": "",
     "envs": {
         "local": {
             "SiteUrl": "local.pc.shenba.com",
