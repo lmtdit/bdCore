@@ -8,7 +8,7 @@
 
 fs      = require 'fs'
 path    = require 'path'
-config  = require '../config'
+config  = require './config'
 gulp    = require 'gulp'
 sprite  = require 'gulp.spritesmith'
 less    = require 'gulp-less'
@@ -109,9 +109,9 @@ _spToLess = (type,cb)->
                 _num++
                 _num%10 == 5 and gutil.log 'Waitting...'
                 if _num == total
-                    console.log 'Sprite IMG and LESS build success!'
+                    gutil.log 'Sprite build success!'
                     _buildMap -> 
-                        gutil.log color.green 'Sprite map build success'
+                        gutil.log color.green 'Sprite Map build success!'
                        _cb()
 
 ###

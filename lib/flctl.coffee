@@ -8,7 +8,7 @@
 
 fs      = require 'fs'
 path    = require 'path'
-config  = require '../config'
+config  = require './config'
 gutil   = require 'gulp-util'
 
 jsMap = {}
@@ -16,13 +16,13 @@ cssMap = {}
 bgMap = {}
 
 try
-    jsMap = JSON.parse fs.readFileSync(path.join(config.mapPath, config.jsLibsMapName), 'utf8')
+    jsMap = JSON.parse fs.readFileSync(path.join(config.mapPath, config.jsDistMapName), 'utf8')
     cssMap = JSON.parse fs.readFileSync(path.join(config.mapPath, config.cssMapName), 'utf8')
     bgMap = JSON.parse fs.readFileSync(path.join(config.mapPath, config.cssBgMap), 'utf8')
 catch e
     # ...
     # cssBgMap
-    # jsLibsMapName
+    # jsDistMapName
 
 
 ###生产文件的控制基类###

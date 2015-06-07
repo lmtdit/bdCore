@@ -12,7 +12,7 @@ color   = gutil.colors
 imgmin  = require 'gulp-imagemin'
 rename  = require 'gulp-rename'
 butil   = require './butil'
-config  = require '../config'
+config  = require './config'
 errrHandler = butil.errrHandler
 objMixin    = butil.objMixin
 md5         = butil.md5
@@ -42,6 +42,7 @@ exports.dir = ->
         config.jsOutPath
         config.tplOutPath
         config.cssOutPath
+        config.docOutPath
         config.spriteImgOutPath
     ]
 
@@ -180,8 +181,8 @@ exports.libs = (cb)->
     jsonData = JSON.stringify namePaths, null, 2
     # gutil.log jsonData
     not fs.existsSync(config.dataPath) and butil.mkdirsSync(config.dataPath)
-    fs.writeFileSync path.join(config.dataPath, config.jsLibsMapName), jsonData, 'utf8'
-    gutil.log color.green "#{config.jsLibsMapName} build success"
+    fs.writeFileSync path.join(config.dataPath, config.jsDistMapName), jsonData, 'utf8'
+    gutil.log color.green "#{config.jsDistMapName} build success"
     _cb()
 ###
 # build require.config
@@ -192,7 +193,7 @@ exports.cfg = (cb)->
 
     # 读取json配置
     shimData = JSON.parse fs.readFileSync(path.join(config.dataPath, 'shim.json'), 'utf8')
-    jsLibPaths = JSON.parse fs.readFileSync(path.join(config.dataPath, config.jsLibsMapName), 'utf8')
+    jsLibPaths = JSON.parse fs.readFileSync(path.join(config.dataPath, config.jsDistMapName), 'utf8')
 
     # 预留给第三方的js插件的接口
     jsPaths = JSON.parse fs.readFileSync(path.join(config.dataPath, 'paths.json'), 'utf8') 
@@ -202,30 +203,16 @@ exports.cfg = (cb)->
     for key,val of jsLibPaths
         if key isnt 'require' and key isnt 'almond'
             newPaths[key] = val
-
-    rCfg_dev =
-        baseUrl: config.staticPath + 'js'
-        paths: _.extend newPaths,jsPaths
-        shim: shimData
-
     rCfg =
-        baseUrl: config.staticPath + '_js'
+        baseUrl: config.staticRoot + '_src/_js'
         paths: _.extend newPaths,jsPaths
         shim: shimData
-
+        
     jsSrcPath = config.jsSrcPath
-    
-    configStr_dev = "
-        require.config(#{JSON.stringify(rCfg_dev, null, 2)});\n
-    "
-    configStr = "
-        require.config(#{JSON.stringify(rCfg, null, 2)});\n
-    "
+    require_cfg = "require.config(#{JSON.stringify(rCfg, null, 2)});"
+    fs.writeFileSync path.join(jsSrcPath, "require_cfg.js"), require_cfg, 'utf8'
 
-    fs.writeFileSync path.join(jsSrcPath, "config.dev.js"), configStr_dev, 'utf8'
-    fs.writeFileSync path.join(jsSrcPath, "config.js"), configStr, 'utf8'
-
-    gutil.log color.green "config.js build success!"
+    gutil.log color.green "config build success!"
     _cb()
 
 
@@ -243,3 +230,4 @@ exports.jsonToDist = (cb)->
             fs.writeFileSync path.join(_outPath, file), JSON.stringify(_jsonData), 'utf8'
     gutil.log "ALL map pushed!"
     _cb()
+

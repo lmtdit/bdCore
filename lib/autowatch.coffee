@@ -7,7 +7,7 @@
 ###
 fs      = require 'fs'
 path    = require 'path'
-config  = require '../config'
+config  = require './config'
 watch   = require 'gulp-watch'
 gutil   = require 'gulp-util'
 cssbd   = require './cssbd'
@@ -48,7 +48,7 @@ class watchChecker
     constructor: (@file)->
     getParse: ->
         _file = @file
-        _str =  _file.split("#{config.theme}/")[1] + ""
+        _str =  _file.split("#{config.srcPath}/")[1] + ""
         _pathObj = path.parse(_str)
         return _pathObj
     type: ->
@@ -86,7 +86,7 @@ class checkFile extends watchChecker
         _type = @type()
         return false if _type isnt 'html'
         gutil.log "Injecting HTML source files relative to HTML Template."
-        htmlCtl()
+        htmlCtl config,->
 
     less: (cb)=>
         _type = @type()

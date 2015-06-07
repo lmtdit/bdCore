@@ -8,7 +8,7 @@
 
 fs      = require 'fs'
 path    = require 'path'
-config  = require '../config'
+config  = require './config'
 
 jsonToPhp = (cb)->
     _cb = cb or ->

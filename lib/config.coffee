@@ -1,5 +1,5 @@
 ###
-# FE build config
+# v.build config
 # @date 2014-12-2 15:10:14
 # @author pjg <iampjg@gmail.com>
 # @link http://pjg.pw
@@ -7,35 +7,47 @@
 ###
 
 path  = require 'path'
-butil = require './lib/butil'
+butil = require './butil'
 
-st_root = path.join __dirname
+cfg = require '../config.json'
 
+args   = require('yargs').argv
+
+st_root = process.env.INIT_CWD
 viewsDir = 'html/'
-cfg   = butil.getJSONSync('config.json')
+
+_env = (args.e or args.env) ? 'local'
+_isDebug = (args.d or args.debug) ? false
+_envs = cfg.envs
+
 srcPath = cfg.srcPathName
 distPath = cfg.distPathName
 
-# html模板路径
-# htmlTplDist = cfg.htmlTplDist
-
 # 开发环境下，请求静态资源的域名
-cndDomain = cfg.cndDomain
+SiteUrl = _envs[_env].SiteUrl
+cndDomain = _envs[_env].cndDomain
+WapSiteUrl = _envs[_env].WapSiteUrl
 
-module.exports = 
-  # 开发环境
-  evn: cfg.evn
+module.exports =
+  # 开发环境 
+  env: _env 
+
+  # 是否开启debug模式
+  isDebug: _isDebug
 
   # 是否开启在线combo
   isCombo: cfg.isCombo
 
   # 项目的主目录
   rootPath: st_root
-  theme: srcPath
+  srcPath: cfg.srcPathName
+  distPath: cfg.distPathName
 
   # PHP的模板路径
   views: viewsDir
   htmlTplSrc: path.join "..",srcPath,viewsDir
+
+  # html模板路径
   htmlTplDist: cfg.htmlTplDist
 
   # PHP版本map输出路径
@@ -50,14 +62,20 @@ module.exports =
   coreJsName: cfg.jsPrefix + cfg.coreJs.name
   coreJsMods: cfg.coreJs.mods
 
-  staticRoot: "http://" + cndDomain + "/"
-  staticPath: "http://" + cndDomain + "/" + srcPath + "/"
-  cndStaticPath: "http://" + cndDomain + "/" + distPath + "/"
-  GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "dev" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={};\n"
+  # 静态路径
+  staticRoot: "http://#{cndDomain}/"
+  staticPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/" else "#{srcPath}/")
+  imgPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/img/" else "#{srcPath}/_img/")
+  cssPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/css/" else "#{srcPath}/_css/")
+  jsPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/js/" else "#{srcPath}/_js/")
+
+  # 插入到页面中的全局变量
+  GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={};"
+
   # 一些gulp构建配置
   dataPath: './data'
   spriteDataPath: './data/sp.map.json'
-  spriteHasPath: './data/sp.has.json'
+  # spriteHasPath: './data/sp.has.json'
 
   jsLibPath: '../' + srcPath + '/js/vendor/'
   docOutPath: '../' + srcPath + '/doc/'
@@ -87,13 +105,11 @@ module.exports =
 
   # Hash Map path
   mapPath: '../' + distPath + '/map/'
-  jsMapName : 'jsmap.json'
-  cssMapName : 'cssmap.json'
-  # spMapName : 'spmap.json'
-  cssBgMap : 'cssbgmap.json'
-  jsLibsMapName : 'jslibs.json'
-  jsDistMapName : 'jslibs.json'
-
+  jsMapName: 'jsmap.json'
+  jsDistMapName: 'jslibs.json'
+  cssMapName: 'cssmap.json'
+  cssBgMap: 'cssbgmap.json'
+  
   # 一个大坑啊。。。
   watchFiles: [
       '../' + srcPath + '/js/**/*.js'

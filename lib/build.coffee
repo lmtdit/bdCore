@@ -8,7 +8,7 @@
 
 fs      = require 'fs'
 path    = require 'path'
-config  = require '../config'
+config  = require './config'
 gutil   = require 'gulp-util'
 color   = gutil.colors
 
@@ -24,6 +24,9 @@ htmlToJs  = require './html2js'
 htmlCtl   = require './htmlctl'
 autowatch = require './autowatch'
 
+# 环境判断
+env     = config.env
+isDebug = config.isDebug
 
 ###
 # ************* 构建任务函数 *************
@@ -38,7 +41,7 @@ exports.init = ->
 ###文件删除操作###
 exports.files = 
     delJson: ->
-        files = ['jslib.paths','sp.map',]
+        files = ['jslib.paths','sp.map']
         for file in files
             json_file = path.join(config.dataPath, file + '.json')
             if fs.existsSync json_file
@@ -164,7 +167,8 @@ exports.less = (cb)->
     _cb = cb or ->
     exports.sprite ->
         exports.less2css ->
-            exports.bgMap -> _cb()
+            exports.bgMap -> 
+                    _cb()
 
 ###
 # build JS to cache
@@ -174,7 +178,8 @@ exports.js = (cb)->
     exports.jsLibs ->
         exports.config ->
             exports.tpl2dev ->
-                exports.js2dev -> _cb()
+                exports.js2dev -> 
+                    _cb()
 ###
 # css and js file to dist
 ###
