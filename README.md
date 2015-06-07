@@ -9,7 +9,7 @@ by Pang.J.G
 本项目基于nodejs环境下的Gulp.JS
 
 
-### 安装
+## 安装
 
 * 前往 [http://nodejs.org/](http://nodejs.org/) 安装nodeJS
    - 注意系统是32位还是64位的，选择对应的版本
@@ -21,82 +21,16 @@ by Pang.J.G
 
 * 升级自动化工具：进入build的目录，执行 `npm update`
 
+## 初始化
 
-
-### 前端开发工具的目录结构
-```html
-├── build
-    ├── bin // shell执行命令目录
-    ├── data // 第三方JS模块目录
-    ├── lib // 核心的构建方法 
-    ├── config.js // 开发配置文件
-    ├── config.json // 项目构建的配置入口文件
-    ├── gulpfile.js // gulp启动配置入口文件
-    ├── package.json // nodeJS依赖安装的包管理文件
-```
-
-项目构建的配置入口文件 `build/config.json` 说明
-```json
-{
-  "evn":"dev", // 申明环境变量，预设值为 `dev` 和 `debug`，如果是其他值，则为`release`
-  "isCombo":false, // 是否开启`combo`机制，需要配合在线的`combo`服务器，目前此值暂未使用
-  "cndDomain":"static.path", //CDN域名，不同的环境需要配置不同的域名
-  "srcPathName":"_src", // 静态资源的源码目录
-  "distPathName":"assets", // 静态资源的输出目录
-  "htmlTplDist": "../html/", //HTML DEMO文件的输出目录
-  "coreJs":{
-      "mods":["jquery","smcore","cookie"], //指定js核心库的模块
-      "name":"corelibs" //js核心库的文件名
-  },
-  "jsPrefix":"sb.", //JS模块打包后的前缀
-  "hashLength":12 //静态生产文件的MD5戳的截取长度
-}
-```
-
-
-### 自动化命令使用说明
-
-> 以下操作，需进入 `build` 目录下执行
-
-**查看自动化框架支持的项目构建命令**
-```
-$ gulp -T
-```
-
-本前端开发框架支持的命令如下
-```log
- Tasks for gulpfile.js
-   ├── init //用于前端项目的初始化
-   ├── del.data //删除构建过程的缓存数据
-   ├── del.dist //清理自动构建的静态文件[生产文件]
-   ├── jslibs //生产js的第三方库列表，用户构建require.config的paths对象
-   ├── cfg //生成require.config
-   ├── tpl //将html模板构建成为JS模块，即html转化为AMD规范的js文件
-   ├── js2dev //匿名的AMD模块构建为具名的AMD模块，并发布到源码的缓存目录[_src/_js/]，供本地调用
-   ├── js2dist //按AMD规范的js模块转化为原生的js，并按依赖顺序COMBO成1个文件，然后发布到生产目录，生成2份代码
-   ├── sp //合并生产雪碧图和对应了LESS
-   ├── bgmap //所有css将用到背景图[包括自动生产的雪碧]生产一份hash map（json文件）
-   ├── less //将less输出为css，并发布到源码的缓存目录[_src/_css/]，供本地调用
-   ├── css //将缓存目录中的css压缩并自动将引用背景图加上MD5戳，然后发布到生产目录
-   ├── all2dist //css和js源码的缓存目录中的文件发布到生产目录
-   ├── html2dist //将模块化的静态html文件构建成一个静态可使用的html demo（img scr的引用图片替换为带MD5戳）
-   ├── tool //生快速启动gulp构建工具的批处理
-   ├── watch //gulp的watch任务，可快速启动开发者模式
-   ├── default //默认任务，构建完成后进入开发模式
-   └─┬ release //发布任务，构建完成后退出gulp
-     └── del.dist
-```
-
-#### **命令使用说明**
-
-**项目初始化**
+在第一次运行时，项目初始化
 ```
 gulp init
 ```
 
-根据 `build/config.json` 中的配置，项目初始化后会生成如下的目录结构：
+根据 `config.json` 中的配置，项目初始化后会生成如下的目录结构：
 
-```
+```js
 ├── build
     ├── bin // shell执行命令目录
     ├── data // 第三方JS模块目录
@@ -123,12 +57,94 @@ gulp init
     └──map  //保存css、js以及雪碧图的hash的map
 ```
 
+## 开发
+
 默认启动开发模式
 ```
 gulp
 ```
 
-发布
+
+### 更多参数使用说明
+
+以gulp命令启动程序，它可接收两个参数，分别是
+
+参数1： --env 或者 --e
+> 此参数是环境参数，默认值为'local'，其他值分别为test、rc、www，分别针对测试、预发布和生产环境，在测试和发布环节中使用。
+
+参数2： --debug 或者 --d
+> 此参数为调试开关，带上此参数，html模板则开启debug模式
+
+#### 命令使用示例: 
+1、local开发环境的watch命令：
+```shell
+gulp
+# or
+gulp --e local
+# or
+gulp --env local
+#以上三个命令是等效的
 ```
-gulp release
+
+2、local开发环境的debug命令：
+```shell
+gulp --d
+# or
+gulp --debug
+# or
+gulp --env local --d
 ```
+
+3、发布代码
+```
+# 测试环境
+gulp --e test
+gulp --env test
+# 预发布环境
+gulp --e rc
+gulp --env rc
+# 生产环境
+gulp --e rc
+gulp --env rc
+```
+
+4、其他命令使用说明
+
+**查看自动化框架支持的项目构建命令**
+```
+$ gulp -T
+```
+
+本前端开发框架还支持如下命令：
+```js
+ Tasks
+   ├── init //用于前端项目的初始化
+   ├── del.data //删除构建过程的缓存数据
+   ├── del.dist //清理自动构建的静态文件[生产文件]
+   ├── jslibs //生产js的第三方库列表，主要用于构建require.config的paths对象
+   ├── cfg //生成require.config
+   ├── tpl //将html模板构建成为JS模块，即html转化为AMD规范的js文件
+   ├── js2dev //匿名的AMD模块构建为具名的AMD模块，并发布到源码的缓存目录[_src/_js/]，供本地调用
+   ├── js2dist //按AMD规范的js模块转化为原生的js，并按依赖顺序COMBO成1个文件，然后发布到生产目录，生成2份代码
+   ├── sp //合并生产雪碧图和对应了LESS
+   ├── bgmap //所有css将用到背景图[包括自动生产的雪碧]生产一份hash map（json文件）
+   ├── less //将less输出为css，并发布到源码的缓存目录[_src/_css/]，供本地调用
+   ├── css //将缓存目录中的css压缩并自动将引用背景图加上MD5戳，然后发布到生产目录
+   ├── all2dist //css和js源码的缓存目录中的文件发布到生产目录
+   ├── html //将模块化的静态html文件构建成一个静态可使用的html demo（img scr的引用图片替换为带MD5戳）
+   ├── watch //gulp的watch任务，可快速启动开发者模式
+   ├── default //默认任务，默认进入开发模式
+   └── release //发布任务
+```
+
+## 规范和建议
+
+### 架构流程和目录规范
+
+  ![项目的开发架构流程和规范](./readme.jpg)
+  ![HTML和CSS的组织规范和建议](./html_css.jpg)
+  ![JavaScript的组织规范和建议](./javascript.jpg)
+
+## 编程规范
+  - [JavaScript编程规范](./javascript.md)
+  - [CSS编程规范](./css.md)
