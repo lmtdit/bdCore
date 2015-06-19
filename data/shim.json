@@ -1,5 +1,5 @@
 {
-    "Zepto":{
+    "jquery":{
         "exports": "$"
     },
     "smcore": {
@@ -7,7 +7,7 @@
     },
     "cookie": {
       "deps": [
-        "Zepto"
+        "jquery"
       ],
       "exports": "$.cookie"
     },

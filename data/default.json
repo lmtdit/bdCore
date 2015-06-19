@@ -16,6 +16,11 @@
             "cndDomain": "local.pcstatics.shenba.com",
             "WapSiteUrl": "local.pcstatics.shenba.com"
         },
+        "dev": {
+            "SiteUrl": "dev.pc.shenba.com",
+            "cndDomain": "dev.pcstatics.shenba.com",
+            "WapSiteUrl": "dev.pcstatics.shenba.com"
+        },
         "test": {
             "SiteUrl": "test.pc.shenba.com",
             "cndDomain": "test.pcstatics.shenba.com",

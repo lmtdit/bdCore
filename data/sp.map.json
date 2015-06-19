@@ -142,7 +142,9 @@
         "date-on.png",
         "del.png",
         "flow-off.png",
+        "flow-off2.png",
         "flow-on.png",
+        "flow-on2.png",
         "grey-block-active.png",
         "grey-block.png",
         "share.png",
@@ -156,7 +158,8 @@
         "foot-ser3.png",
         "foot-ser4.png",
         "foot-ser5.png",
-        "foot-ser6.png"
+        "foot-ser6.png",
+        "foot-ser7.png"
     ],
     "paging": [
         "last0.png",

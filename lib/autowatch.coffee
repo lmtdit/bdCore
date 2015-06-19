@@ -86,7 +86,7 @@ class checkFile extends watchChecker
         _type = @type()
         return false if _type isnt 'html'
         gutil.log "Injecting HTML source files relative to HTML Template."
-        htmlCtl config,->
+        htmlCtl ->
 
     less: (cb)=>
         _type = @type()

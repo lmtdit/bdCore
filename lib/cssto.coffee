@@ -22,7 +22,7 @@ _cssDistPath    = config.cssDistPath
 _cssMapName     = config.cssMapName
 _mapPath        = config.mapPath
 _hashLen        = config.hashLength
-_isCombo         = config.isCombo
+# _isCombo        = config.isCombo
 
 binit       = require './binit'
 butil       = require './butil'
@@ -55,7 +55,7 @@ _stream = (files,cb,cb2)->
         _nameObj.hash = md5(source.contents)
         cssBgReg = /url\s*\(([^\)]+)\)/g
         _source = String(source.contents).replace cssBgReg, (str,map)->
-            if map.indexOf('fonts/') isnt -1 or map.indexOf('font/') isnt -1
+            if map.indexOf('fonts/') isnt -1 or map.indexOf('font/') isnt -1 or map.indexOf('#') isnt -1
                 return str
             else
                 key = map.replace('../_img/', '')
