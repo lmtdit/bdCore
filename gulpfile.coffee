@@ -16,6 +16,8 @@ color   = gutil.colors
 cp      = require 'child_process'
 exec    = cp.exec
 
+taskCtrl= require './lib/taskCtrl'
+
 helper = ->
     gutil.log color.yellow.bold "前端开发框架使用说明："
     gutil.log color.cyan "以gulp命令启动程序，它可接收两个参数，分别是"
@@ -183,6 +185,97 @@ gulp.task 'watch', ->
 # release function
 ###
 release = ()->
+    #css主线任务
+    cssFn = (mainCb) ->
+        ###css相关任务 start###
+        cssTask = new taskCtrl
+            drain: ->
+                build.css2dist ->
+                    mainCb()
+
+        ###less任务###
+        cssTask.add 
+            name: 'less'
+            task: (cb) ->
+                build.less ->
+                    cb()#通知任务完成
+        ,(err) ->
+            gutil.log err if err
+            gutil.log 'task:less is finished'
+
+        ###bgMap任务###
+        cssTask.add 
+            name: 'bgMap'
+            task: (cb) ->
+                build.bgMap ->
+                    cb()#通知任务完成
+        ,(err) ->
+            gutil.log err if err
+            gutil.log 'task:bgMap is finished'
+
+        ###css相关任务 end###
+
+    #js主线任务
+    jsFn = (mainCb) ->
+        build.js ->
+            ###js相关任务 start###
+            jsTask = new taskCtrl
+                drain: ->
+                    build.js2dist ->
+                        mainCb()
+
+            ###corejs任务###
+            jsTask.add 
+                name: 'corejs'
+                task: (cb) ->
+                    build.corejs ->
+                        cb()#通知任务完成
+            ,(err) ->
+                gutil.log err if err
+                gutil.log 'task:corejs is finished'
+
+            ###noamd任务###
+            jsTask.add 
+                name: 'noamd'
+                task: (cb) ->
+                    build.noamd ->
+                        cb()#通知任务完成
+            ,(err) ->
+                gutil.log err if err
+                gutil.log 'task:noamd is finished'
+
+
+        ###js相关任务 end###
+
+    releaseTask = new taskCtrl
+        drain: ->#结束后执行监听
+            gutil.log color.cyan "构建map..."
+            setTimeout ->
+                build.json2dist ->
+                    build.json2php()
+                    gutil.log color.cyan "构建完成，可以发版了..."
+            ,2000
+    
+    #css主线任务
+    releaseTask.add 
+        name: 'mainCss'
+        task: (cb) ->
+            cssFn cb
+    ,(err) ->
+        gutil.log err if err
+        gutil.log 'task:mainCss is finished'
+
+    #js主线任务
+    releaseTask.add 
+        name: 'mainJs'
+        task: (cb) ->
+            jsFn cb
+    ,(err) ->
+        gutil.log err if err
+        gutil.log 'task:mainJs is finished'
+
+    ###
+
     build.less ->
         build.bgMap ->
             build.css2dist ->
@@ -196,10 +289,41 @@ release = ()->
                                         build.json2php()
                                         gutil.log color.cyan "构建完成，可以发版了..."
                                 ,2000
+    ###
 
 gulp.task 'default',[], ->
     # 开发环境的构建命令
     if env == 'local' and !isDebug
+        debugTask = new taskCtrl
+            drain: ->#结束后执行监听
+                build.htmlctl ->
+                    clearTimeout _Timer if _Timer
+                    _Timer = setTimeout ->
+                        gulp.start ['watch']
+                    ,2000
+
+        ###less任务###
+        debugTask.add 
+            name: 'less'
+            task: (cb) ->
+                build.less ->
+                    cb()#通知任务完成
+        ,(err) ->
+            gutil.log err if err
+            gutil.log 'task:less is finished'
+
+        ###js任务###
+        debugTask.add 
+            name: 'js'
+            task: (cb) ->
+                build.js ->
+                    cb()#通知任务完成
+        ,(err) ->
+            gutil.log err if err
+            gutil.log 'task:js is finished'
+
+
+        ###
         setTimeout ->
             build.less ->
                 build.js ->
@@ -209,44 +333,11 @@ gulp.task 'default',[], ->
                             gulp.start ['watch']
                         ,2000
         ,100
+        ###
         
     # 测试环境代码的发布任务
     else
         release()
 
 gulp.task 'release',[], ->
-<<<<<<< HEAD
     release()
-
-=======
-###
-# release development
-###
-gulp.task 'dev',[], ->
-    setTimeout ->
-        build.sprite ->
-            build.less2css ->
-                build.bgMap ->
-                    build.css2dist ->
-                        build.jsLibs ->
-                            build.config ->
-                                build.tpl2dev ->
-                                    build.js2dev ->
-                                        build.htmlctl ->
-                                            gutil.log color.green 'Finished Release!'
-    ,100
-
-###
-# release
-###
-gulp.task 'clean', ->
-    build.files.delDistFiles()
-    build.corejs()
-<<<<<<< HEAD
->>>>>>> test
-=======
->>>>>>> origin/test
->>>>>>> e09c6ed7713afe3d00d1a151b8a734a2ab855cb9
-=======
-    release()
->>>>>>> d8821ce2578eacc28648b8ae3c18ec439b1ae3cc
