@@ -89,6 +89,9 @@ module.exports =
   spriteDistPath: '../' + distPath + '/img/sp/'
   cssBgDistPath: '../' + distPath + '/img/bg/'
 
+  # 独立的 widgets 控件
+  
+
   # 文件构建的Debug目录
   cssOutPath: '../' + srcPath + '/_css/'
   jsOutPath: '../' + srcPath + '/_js/'

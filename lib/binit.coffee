@@ -70,12 +70,21 @@ exports.map = ->
 ###
 # build images
 ###
+exports.cpImg = (cb)->
+    _imgSrcPath = path.join config.rootPath, config.imgSrcPath
+    _imgDistPaht = path.join config.rootPath, config.imgDistPath
+    gulp.src _imgSrcPath + '**/*.{gif,jpg,png,svg}'
+        .pipe gulp.dest(_imgDistPaht)
+        .on 'end',->
+            gutil.log "Img copy done!"
+            cb and cb()
 exports.bgmap = (cb)->
     _cb = cb or ->
     _map = {}
     
     _imgSrcPath = path.join config.rootPath, config.imgSrcPath
-
+    
+    exports.cpImg()
     # 递归输出文件的路径Tree和hash
     makePaths = (sup_path)->
         _sup_path = sup_path or _imgSrcPath

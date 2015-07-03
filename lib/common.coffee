@@ -44,7 +44,7 @@ exports.replaceImg = (source)->
             return str
         else
             key = map.replace('/_img/', '').replace(/(^\'|\")|(\'|\"$)/g, '')
-            val = imgPath + (if _.has(cssBgMap,key) then cssBgMap[key].distname else key + '?=t' + String(new Date().getTime()).substr(0,8))
+            val = imgPath + (if _.has(cssBgMap,key) and env isnt 'local' then cssBgMap[key].distname else key + '?t=' + String(new Date().getTime()).substr(0,8))
             console.log "#{map}--> #{val}"
             return str.replace(map, val)
     return  file_source
@@ -57,5 +57,5 @@ exports.htmlMinify = (source)->
                     .replace(/\r/g, '')
                     .replace(/\n\s+/g, ' ')
                     .replace(/\s+/g, ' ')
-                    .replace(/>([\n\s+]*?)</g,'><')
+                    .replace(/>([\n\s]*?)</g,'><')
     return _source
