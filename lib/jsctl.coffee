@@ -135,9 +135,9 @@ class jsDepBuilder
         depMap = {}
         _srcPath = @srcPath
         _oneJsDep = @oneJsDep
+        # console.log _srcPath
         fs.readdirSync(_srcPath).forEach (v)->
             jsPath = path.join(_srcPath, v)
-            # if fs.statSync(jsPath).isDirectory()  and v isnt 'tpl'
             if fs.statSync(jsPath).isDirectory() and v isnt 'vendor'
                 fs.readdirSync(jsPath).forEach (f)->
                     if f.indexOf('.') != 0 and f.indexOf('.js') != -1
@@ -154,21 +154,22 @@ class jsDepBuilder
                                     # console.log "#{v}/#{f}/#{name_lv2}"
                                     fileDep = _oneJsDep(jsPath_lv2,ff)
                                     depMap["#{v}/#{f}/#{name_lv2}"] = fileDep
-
+        # console.log depMap
         return depMap
 
     # 生成每个文件的所有依赖列表
-    makeDeps: () =>
+    makeDeps: =>
         _allDeps = {}
         _depLibs = []
         _alljsDep = @allJsDep()
+        # console.log _alljsDep
         # 计算每个文件对应的依赖，递归算法
         makeDep = (deps)-> 
-            # console.log deps
             _list = []
             make = (deps) ->
-                deps.forEach (dep) ->   
-                    currDeps = _alljsDep[dep]         
+                deps.forEach (dep)->
+                    currDeps = _alljsDep[dep]
+                    # console.log dep
                     if currDeps or dep.indexOf("/") != -1
                         make(currDeps)
                     _list.push(dep)
@@ -179,8 +180,8 @@ class jsDepBuilder
             _allDeps[file] = {}
             _list = [] 
             _lib = []
-
             if depList.length > 0
+                # console.log file
                 _tempArr = makeDep(depList)
                 _tempArr = _.union _tempArr
                 # 依赖排重                
@@ -268,7 +269,7 @@ class jsToDist extends jsDepBuilder
         _cb = cb or ->
         _module_name = name
         # 过滤下划线的js模块
-        return _cb() if _module_name.indexOf("_") is 0
+        return _cb() if _module_name.indexOf("_/") is 0
 
         _num = 0
 
@@ -307,19 +308,19 @@ class jsToDist extends jsDepBuilder
         _cb = cb or ->
         _srcPath = @srcPath
         _allDeps = @makeDeps().allDeps
-        # console.log _cfg
-        _depList = _allDeps.modList
+        # console.log _allDeps
+        # _depList = _allDeps.modList
         # 生成依赖
         _num = 0
         gutil.log color.yellow "Combine javascript modules! Waitting..."
         for module,deps of _allDeps
+            # console.log module
             # 过滤下划线的js模块
-            if module.indexOf("_") isnt 0
+            if module.indexOf("_") isnt 0 and module.indexOf("/_") is -1
                 _this_js = path.join(_srcPath, module + '.js')
                 _outName = @prefix + module.replace(/\//g,'_')
                 _jsData = []  
                 _modList = deps.modList
-                # console.log _modList
                 for f in _modList
                     _jsFile = path.join(_srcPath, f + '.js')
                     if fs.statSync(_jsFile).isFile() and f.indexOf('.') != 0
@@ -364,7 +365,6 @@ class jsToDist extends jsDepBuilder
         fs.readdirSync(_srcPath).forEach (v)->
             _jsFile = path.join(_srcPath, v)
             if fs.statSync(_jsFile).isFile() and v.indexOf('.') isnt 0
-                # console.log _jsFile
                 _source = fs.readFileSync(_jsFile, 'utf8')
                 _outName = v.replace('.js','')
                 _buildJs _source,_outName,(map)->

@@ -7,7 +7,7 @@
  * @link http://pjg.pw
  * @version $Id$
  */
-var _cfg, _cfgData, _cfgFile, build, cfg, color, cp, env, exec, fs, gulp, gutil, helper, isDebug, jsdoc, path, release, taskCtrl;
+var _cfg, _cfgData, _cfgFile, build, cfg, color, cp, env, exec, fs, gulp, gutil, helper, isDebug, jsdoc, path, release;
 
 fs = require('fs');
 
@@ -24,8 +24,6 @@ color = gutil.colors;
 cp = require('child_process');
 
 exec = cp.exec;
-
-taskCtrl = require('./lib/taskCtrl');
 
 helper = function() {
   gutil.log(color.yellow.bold("前端开发框架使用说明："));
@@ -231,207 +229,46 @@ gulp.task('watch', function() {
  */
 
 release = function() {
-  var cssFn, jsFn, releaseTask;
-  cssFn = function(mainCb) {
-
-    /*css相关任务 start */
-    var cssTask;
-    cssTask = new taskCtrl({
-      drain: function() {
-        return build.css2dist(function() {
-          return mainCb();
-        });
-      }
-    });
-
-    /*less任务 */
-    cssTask.add({
-      name: 'less',
-      task: function(cb) {
-        return build.less(function() {
-          return cb();
-        });
-      }
-    }, function(err) {
-      if (err) {
-        gutil.log(err);
-      }
-      return gutil.log('task:less is finished');
-    });
-
-    /*bgMap任务 */
-    return cssTask.add({
-      name: 'bgMap',
-      task: function(cb) {
-        return build.bgMap(function() {
-          return cb();
-        });
-      }
-    }, function(err) {
-      if (err) {
-        gutil.log(err);
-      }
-      return gutil.log('task:bgMap is finished');
-    });
-
-    /*css相关任务 end */
-  };
-  jsFn = function(mainCb) {
-    return build.js(function() {
-
-      /*js相关任务 start */
-      var jsTask;
-      jsTask = new taskCtrl({
-        drain: function() {
-          return build.js2dist(function() {
-            return mainCb();
-          });
-        }
-      });
-
-      /*corejs任务 */
-      jsTask.add({
-        name: 'corejs',
-        task: function(cb) {
+  return build.less(function() {
+    return build.bgMap(function() {
+      return build.css2dist(function() {
+        return build.js(function() {
           return build.corejs(function() {
-            return cb();
+            return build.noamd(function() {
+              return build.js2dist(function() {
+                gutil.log(color.cyan("构建map..."));
+                return setTimeout(function() {
+                  return build.json2dist(function() {
+                    build.json2php();
+                    return gutil.log(color.cyan("构建完成，可以发版了..."));
+                  });
+                }, 2000);
+              });
+            });
           });
-        }
-      }, function(err) {
-        if (err) {
-          gutil.log(err);
-        }
-        return gutil.log('task:corejs is finished');
-      });
-
-      /*noamd任务 */
-      return jsTask.add({
-        name: 'noamd',
-        task: function(cb) {
-          return build.noamd(function() {
-            return cb();
-          });
-        }
-      }, function(err) {
-        if (err) {
-          gutil.log(err);
-        }
-        return gutil.log('task:noamd is finished');
+        });
       });
     });
-
-    /*js相关任务 end */
-  };
-  releaseTask = new taskCtrl({
-    drain: function() {
-      gutil.log(color.cyan("构建map..."));
-      return setTimeout(function() {
-        return build.json2dist(function() {
-          build.json2php();
-          return gutil.log(color.cyan("构建完成，可以发版了..."));
-        });
-      }, 2000);
-    }
   });
-  releaseTask.add({
-    name: 'mainCss',
-    task: function(cb) {
-      return cssFn(cb);
-    }
-  }, function(err) {
-    if (err) {
-      gutil.log(err);
-    }
-    return gutil.log('task:mainCss is finished');
-  });
-  return releaseTask.add({
-    name: 'mainJs',
-    task: function(cb) {
-      return jsFn(cb);
-    }
-  }, function(err) {
-    if (err) {
-      gutil.log(err);
-    }
-    return gutil.log('task:mainJs is finished');
-  });
-
-  /*
-  
-  build.less ->
-      build.bgMap ->
-          build.css2dist ->
-              build.js ->
-                  build.corejs ->
-                      build.noamd ->
-                          build.js2dist ->
-                              gutil.log color.cyan "构建map..."
-                              setTimeout ->
-                                  build.json2dist ->
-                                      build.json2php()
-                                      gutil.log color.cyan "构建完成，可以发版了..."
-                              ,2000
-   */
 };
 
 gulp.task('default', [], function() {
-  var debugTask;
   if (env === 'local' && !isDebug) {
-    debugTask = new taskCtrl({
-      drain: function() {
-        return build.htmlctl(function() {
-          var _Timer;
-          if (_Timer) {
-            clearTimeout(_Timer);
-          }
-          return _Timer = setTimeout(function() {
-            return gulp.start(['watch']);
-          }, 2000);
-        });
-      }
-    });
-
-    /*less任务 */
-    debugTask.add({
-      name: 'less',
-      task: function(cb) {
-        return build.less(function() {
-          return cb();
-        });
-      }
-    }, function(err) {
-      if (err) {
-        gutil.log(err);
-      }
-      return gutil.log('task:less is finished');
-    });
-
-    /*js任务 */
-    return debugTask.add({
-      name: 'js',
-      task: function(cb) {
+    return setTimeout(function() {
+      return build.less(function() {
         return build.js(function() {
-          return cb();
+          return build.htmlctl(function() {
+            var _Timer;
+            if (_Timer) {
+              clearTimeout(_Timer);
+            }
+            return _Timer = setTimeout(function() {
+              return gulp.start(['watch']);
+            }, 2000);
+          });
         });
-      }
-    }, function(err) {
-      if (err) {
-        gutil.log(err);
-      }
-      return gutil.log('task:js is finished');
-    });
-
-    /*
-    setTimeout ->
-        build.less ->
-            build.js ->
-                build.htmlctl ->
-                    clearTimeout _Timer if _Timer
-                    _Timer = setTimeout ->
-                        gulp.start ['watch']
-                    ,2000
-    ,100
-     */
+      });
+    }, 100);
   } else {
     return release();
   }
