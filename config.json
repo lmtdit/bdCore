@@ -3,7 +3,7 @@
     "srcPathName": "_src",
     "distPathName": "assets",
     "htmlTplDist": "../html/",
-    "phpMapPath": "../../../shenba_php/shenba/map/",
+    "phpMapPath": "../../../shenba_php/shenba_templates/map/pc",
     "coreJs": {
         "mods": [
             "jquery",
