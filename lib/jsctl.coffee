@@ -112,6 +112,7 @@ filterDepMap = (depMap)->
 ### AMD模块的依赖构建工具类库 ###
 class jsDepBuilder
     srcPath: config.jsOutPath
+    coreMods: config.coreJsMods
     amdRegex: /;?\s*define\s*\(([^(]*),?\s*?function\s*\([^\)]*\)/
     depArrRegex: /^[^\[]*(\[[^\]\[]*\]).*$/
     # 单个文件的依赖表
@@ -159,12 +160,13 @@ class jsDepBuilder
 
     # 生成每个文件的所有依赖列表
     makeDeps: =>
+        _coreMods = @coreMods
         _allDeps = {}
         _depLibs = []
         _alljsDep = @allJsDep()
         # console.log _alljsDep
         # 计算每个文件对应的依赖，递归算法
-        makeDep = (deps)-> 
+        _makeDep = (deps)-> 
             _list = []
             make = (deps) ->
                 deps.forEach (dep)->
@@ -175,23 +177,36 @@ class jsDepBuilder
                     _list.push(dep)
             make(deps)
             return _list
+            
+        # 过滤核心模块
+        _filter = (arr)->
+            _temp = []
+            for f in arr
+                _temp.push f if f not in _coreMods
+            return _temp
 
+        # 生成所有依赖链
         for file,depList of _alljsDep
             _allDeps[file] = {}
             _list = [] 
             _lib = []
             if depList.length > 0
-                # console.log file
-                _tempArr = makeDep(depList)
-                _tempArr = _.union _tempArr
+
+                # 过滤核心模块
+                _depList = _filter(depList)
+
+                # 生成依赖表
+                _tempArr = _makeDep(_depList)
+                _tempArr = _.union(_tempArr)
+
                 # 依赖排重                
-                for _file in _tempArr                    
+                for _file in _tempArr                
                     if _file not in _list and _file.indexOf("/") isnt -1 
                         _list.push(_file)
                     else
                         _lib.push(_file) if _file not in _lib
 
-                    _depLibs.push(_file) if _file.indexOf("/") is -1
+                    _depLibs.push(_file) if _file.indexOf("/") is -1 and _file not in _depLibs
 
             _allDeps[file] = {
                 modList: _list
@@ -238,7 +253,8 @@ class jsToDist extends jsDepBuilder
         _outName = config.coreJsName
         _coreMods = @coreMods
         _include = _.union _coreMods.concat(modules)
-        # console.log _include
+        gutil.log _include
+        # return false
         _paths = JSON.parse fs.readFileSync(path.join(config.dataPath, 'jslibs.json'), 'utf8')
         _shim = JSON.parse fs.readFileSync(path.join(config.dataPath, 'shim.json'), 'utf8')
         
@@ -261,6 +277,7 @@ class jsToDist extends jsDepBuilder
         _cb = cb or ->
         _makeDeps = @makeDeps()
         _depLibs = _makeDeps.depLibs
+        # console.log _makeDeps
         # 核心库队列
         @rjsBuilder _depLibs,-> _cb()
 
@@ -308,8 +325,7 @@ class jsToDist extends jsDepBuilder
         _cb = cb or ->
         _srcPath = @srcPath
         _allDeps = @makeDeps().allDeps
-        # console.log _allDeps
-        # _depList = _allDeps.modList
+        
         # 生成依赖
         _num = 0
         gutil.log color.yellow "Combine javascript modules! Waitting..."
