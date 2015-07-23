@@ -3,14 +3,14 @@
     "srcPathName": "_src",
     "distPathName": "assets",
     "htmlTplDist": "../html/",
-    "phpMapPath": "../../../shenba_php/shenba_templates/map/pc",
+    "phpMapPath": "../../../shenba/shenba_templates/map/pc",
     "coreJs": {
         "mods": [
             "jquery",
-            "smcore",
-            "mods/common"
+            "smcore"
         ],
-        "name": "corelibs"
+        "name": "corelibs",
+        "libs":["lazyload","layer"]
     },
     "jsPrefix": "sb.",
     "hashLength": 10,

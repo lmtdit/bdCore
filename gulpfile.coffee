@@ -119,7 +119,7 @@ gulp.task 'css', ->
         build.css2dist()
 
 gulp.task 'map', ->
-    build.json2dist ->
+    #build.json2dist ->
         build.json2php()
 
 ###
@@ -251,7 +251,7 @@ release = ()->
         drain: ->#结束后执行监听
             gutil.log color.cyan "构建map..."
             setTimeout ->
-                build.json2dist ->
+                #build.json2dist ->
                     build.json2php()
                     gutil.log color.cyan "构建完成，可以发版了..."
             ,2000
@@ -275,7 +275,6 @@ release = ()->
         gutil.log 'task:mainJs is finished'
 
     ###
-
     build.less ->
         build.bgMap ->
             build.css2dist ->
