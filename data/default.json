@@ -3,9 +3,9 @@
     "srcPathName": "_src",
     "distPathName": "assets",
     "htmlTplDist": "../html/",
-    "phpMapPath":"../../../shenbaPHP/shenba_templates/map/pc/",
+    "phpMapPath": "../../../shenbaPHP/shenba_templates/map/pc/",
     "coreJs": {
-        "mods": ["jquery","smcore"],
+        "mods": ["jquery", "smcore"],
         "name": "corelibs"
     },
     "jsPrefix": "sb.",

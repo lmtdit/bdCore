@@ -5,12 +5,8 @@
     "htmlTplDist": "../html/",
     "phpMapPath": "../../../shenba/shenba_templates/map/pc",
     "coreJs": {
-        "mods": [
-            "jquery",
-            "smcore"
-        ],
-        "name": "corelibs",
-        "libs":["lazyload","layer"]
+        "mods": ["jquery", "smcore"],
+        "name": "corelibs"
     },
     "jsPrefix": "sb.",
     "hashLength": 10,
