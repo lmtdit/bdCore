@@ -33,8 +33,8 @@ class taskCtrl
 
         @queue = queue
     init: (num) ->
-        queue = new async.queue (task,cb)->
-            gutil.log "task:#{task.name} run"
+        queue = async.queue (task,cb)->
+            gutil.log "task:#{task.name} run;wait:#{queue.length()}"
             task.run cb
         ,num
     add: (obj,endFn) ->#obj:name--任务名称  task--任务function   endFn:任务结束后执行

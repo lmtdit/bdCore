@@ -112,6 +112,8 @@ module.exports =
   jsDistMapName: 'jslibs.json'
   cssMapName: 'cssmap.json'
   cssBgMap: 'cssbgmap.json'
+
+  jsHash: 'jsHash.json' #add by yy
   
   # 一个大坑啊。。。
   watchFiles: [

@@ -28,6 +28,7 @@ errrHandler = butil.errrHandler
 md5         = butil.md5
 jsDistMapName = config.jsDistMapName
 rootPath    = config.rootPath
+_cacheCtrl  = require './cacheCtrl'
 
 # console.log info
 
@@ -267,9 +268,20 @@ class jsToDist extends jsDepBuilder
 
         _rjs.on 'data',(output)->
             _source = String(output.contents)
+            ###
             _buildJs _source,_outName,(map)->
                 _.assign jsHash,map
                 _cb()
+            ###
+
+            #add by yy  判断md5值
+            if not _cacheCtrl.checkHash(_outName,_source)
+                _buildJs _source,_outName,(map)->
+                    _.assign jsHash,map
+                    #add by yy 保存js模块的md5
+                    _cacheCtrl.saveHash()
+
+            _cb()
 
     ### 合并核心js模块 ### 
     coreModule: (cb)=>
@@ -340,10 +352,17 @@ class jsToDist extends jsDepBuilder
                 for f in _modList
                     _jsFile = path.join(_srcPath, f + '.js')
                     if fs.statSync(_jsFile).isFile() and f.indexOf('.') != 0
-                        _source = fs.readFileSync(_jsFile, 'utf8')
+                        
+                        #读取缓存
+                        _source = _cacheCtrl._readCache(_jsFile)
+                        if not _source
+                            _source = fs.readFileSync(_jsFile, 'utf8')
+                            _cacheCtrl._saveCache _jsFile,_source
+
                         _jsData.push _source + ';'
                 # 追加当前模块到队列的最后
                 _jsData.push fs.readFileSync(_this_js, 'utf8') + ';'
+                ###
                 gutil.log "Waitting..." if _num % 10 == 0 and _num > 1
                 try
                     _source = String(_jsData.join(''))
@@ -354,7 +373,22 @@ class jsToDist extends jsDepBuilder
                 catch error
                     gutil.log "Error: #{_outName}"
                     gutil.log error
-        _cb(_num)
+                ###
+
+                _source = String(_jsData.join(''))
+                #add by yy  判断md5值
+                if not _cacheCtrl.checkHash(_outName,_source)
+                    gutil.log "Waitting..." if _num % 10 == 0 and _num > 1
+                    try
+                        _buildJs _source,_outName,(map)->
+                            gutil.log "Combine",color.cyan("'#{module}'"),"---> #{_outName}"
+                            jsHash = _.assign jsHash,map
+                        _num++
+                    catch error
+                        gutil.log "Error: #{_outName}"
+                        gutil.log error
+
+        _cb(_num) 
 
     # build modules to dist
     init: (cb)=>
@@ -363,6 +397,10 @@ class jsToDist extends jsDepBuilder
         _modulesToDev (num)->
             gutil.log color.cyan(num),"javascript modules combined!"
             _buildJsDistMap jsHash
+
+            #add by yy 保存js模块的md5
+            _cacheCtrl.saveHash()
+             
             _cb()
 
     # build core module to dist
@@ -383,9 +421,18 @@ class jsToDist extends jsDepBuilder
             if fs.statSync(_jsFile).isFile() and v.indexOf('.') isnt 0
                 _source = fs.readFileSync(_jsFile, 'utf8')
                 _outName = v.replace('.js','')
+                ###
                 _buildJs _source,_outName,(map)->
                     jsHash = _.assign jsHash,map
                     _buildJsDistMap jsHash
+                ###
+                #add by yy  判断md5值
+                if not _cacheCtrl.checkHash(_outName,_source)
+                    _buildJs _source,_outName,(map)->
+                        jsHash = _.assign jsHash,map
+                        _buildJsDistMap jsHash
+                        #add by yy 保存js模块的md5
+                        _cacheCtrl.saveHash()
         _cb()
 
 

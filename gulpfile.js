@@ -229,7 +229,7 @@ gulp.task('watch', function() {
  */
 
 release = function() {
-  var cssFn, jsFn, releaseTask;
+  var _startTime, cssFn, jsFn, releaseTask;
   cssFn = function(mainCb) {
 
     /*css相关任务 start */
@@ -320,12 +320,16 @@ release = function() {
 
     /*js相关任务 end */
   };
+  _startTime = (new Date()).getTime();
   releaseTask = new taskCtrl({
     drain: function() {
       gutil.log(color.cyan("构建map..."));
       return setTimeout(function() {
+        var _endTime;
         build.json2php();
-        return gutil.log(color.cyan("构建完成，可以发版了..."));
+        gutil.log(color.cyan("构建完成，可以发版了..."));
+        _endTime = (new Date()).getTime();
+        return gutil.log(color.cyan("耗时：" + (_endTime - _startTime) / 1000 + 's...'));
       }, 2000);
     }
   });

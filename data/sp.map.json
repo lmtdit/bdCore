@@ -1,6 +1,8 @@
 {
     "cart": [
         "abc.png",
+        "add.png",
+        "add2.png",
         "addr-off.png",
         "addr-on.png",
         "ank.png",
@@ -30,6 +32,7 @@
         "hook.png",
         "icbc.png",
         "noCart.png",
+        "packet.png",
         "pay.png",
         "phone.png",
         "psbc.png",
