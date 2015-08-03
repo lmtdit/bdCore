@@ -41,7 +41,7 @@ exports.replaceImg = (source,type)->
         map = ''
         str.replace srcReg,(s)->
           map = s.replace(/^src=/,'').replace(/(\'|\")|(\'|\"$)/g, '')
-        if map.indexOf('/_img/') isnt 0 or map.indexOf('http://') is 0 or map.indexOf('data:') is 0
+        if map.indexOf('/_img/') isnt 0 or map.indexOf('http://') is 0 or map.indexOf('data:') is 0 or map.indexOf('/<?php/') isnt 0
             return str
         else if _type is 'tpl'
             key = map.replace('/_img/', '').replace(/(^\'|\")|(\'|\"$)/g, '')
@@ -64,4 +64,6 @@ exports.htmlMinify = (source)->
                     .replace(/\n\s+/g, ' ')
                     .replace(/\s+/g, ' ')
                     .replace(/>([\n\s]*?)</g,'><')
+                    .replace(/<?phpforeach/g,'<?php foreach')
+                    .replace(/<?phpecho/g,'<?php echo')
     return _source

@@ -3,7 +3,7 @@
     "srcPathName": "_src",
     "distPathName": "assets",
     "htmlTplDist": "../html/",
-    "phpMapPath": "../../../shenba/shenba_templates/map/pc",
+    "phpTplPath":"../../../shenba/shenba_templates/",
     "coreJs": {
         "mods": ["jquery", "smcore"],
         "name": "corelibs"

@@ -134,7 +134,11 @@ gulp.task 'all', ->
 ###
 gulp.task 'html', ->
     build.htmlctl()
-
+###
+# php Tpl
+###
+gulp.task 'php', ->
+    build.phpctl()
 
 ###
 # build bat tool
@@ -253,9 +257,10 @@ release = ()->
             gutil.log color.cyan "构建map..."
             setTimeout ->
                 #build.json2dist ->
-                    build.json2php()
-                    gutil.log color.cyan "构建完成，可以发版了..."
-                    _endTime = (new Date()).getTime()
+                    build.phpctl ->
+                        build.json2php()
+                        gutil.log color.cyan "构建完成，可以发版了..."
+                        _endTime = (new Date()).getTime()
 
                     gutil.log color.cyan "耗时："+(_endTime-_startTime)/1000 +'s...'
             ,2000
@@ -300,6 +305,7 @@ gulp.task 'default',[], ->
         debugTask = new taskCtrl
             drain: ->#结束后执行监听
                 build.htmlctl ->
+                    build.phpctl() # 生成php模板
                     clearTimeout _Timer if _Timer
                     _Timer = setTimeout ->
                         gulp.start ['watch']

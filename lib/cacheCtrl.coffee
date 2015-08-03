@@ -7,6 +7,7 @@ butil   = require './butil'
 fs      = require 'fs'
 path    = require 'path'
 _       = require 'lodash'
+Buffer  = require("buffer").Buffer
 
 md5     = butil.md5
 _oldHash = {}
@@ -18,7 +19,8 @@ if not fs.existsSync(_hashFile)
 try
     _oldHash = JSON.parse fs.readFileSync(_hashFile, 'utf8')
 catch e
-    # ...
+    # ...
+
 
 exports = 
     #缓存对象
@@ -29,9 +31,11 @@ exports =
 
     #检测md5
     checkHash: (id,source) ->
-        _md5 = md5 source
+        #使用二进制转换  处理中文问题
+        buf = new Buffer(source)
+        str = buf.toString "binary"
+        _md5 = md5 str
         _flag = false
-        _obj = {}
 
         if @_hash[id] and @_hash[id] is _md5
             _flag = true
