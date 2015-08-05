@@ -334,12 +334,10 @@ release = function() {
     drain: function() {
       gutil.log(color.cyan("构建map..."));
       return setTimeout(function() {
-        build.phpctl(function() {
-          var _endTime;
-          build.json2php();
-          gutil.log(color.cyan("构建完成，可以发版了..."));
-          return _endTime = (new Date()).getTime();
-        });
+        var _endTime;
+        build.json2php();
+        gutil.log(color.cyan("构建完成，可以发版了..."));
+        _endTime = (new Date()).getTime();
         return gutil.log(color.cyan("耗时：" + (_endTime - _startTime) / 1000 + 's...'));
       }, 2000);
     }

@@ -257,12 +257,11 @@ release = ()->
             gutil.log color.cyan "构建map..."
             setTimeout ->
                 #build.json2dist ->
-                    build.phpctl ->
+                    #build.phpctl ->
                         build.json2php()
                         gutil.log color.cyan "构建完成，可以发版了..."
                         _endTime = (new Date()).getTime()
-
-                    gutil.log color.cyan "耗时："+(_endTime-_startTime)/1000 +'s...'
+                        gutil.log color.cyan "耗时："+(_endTime-_startTime)/1000 +'s...'
             ,2000
     
     #css主线任务
