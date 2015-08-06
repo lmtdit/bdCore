@@ -18,10 +18,11 @@ butil     = require './butil'
 flctl     = require './flctl'
 cssbd     = require './cssbd'
 cssToDist = require './cssto'
-jsToDev  = require './jsto'
+jsToDev   = require './jsto'
 jsCtl     = require './jsctl'
 htmlToJs  = require './html2js'
 htmlCtl   = require './htmlctl'
+phpCtl    = require './phpctl'
 autowatch = require './autowatch'
 
 # 环境判断
@@ -151,6 +152,9 @@ exports.htmlctl = htmlCtl
 
 # 把map文件发布到HTML模板的生产目录
 exports.json2dist = binit.jsonToDist
+
+# php模板构建
+exports.phpctl = phpCtl
 
 # 生成PHP版本的Map
 exports.json2php = require('./json2php')

@@ -25,11 +25,11 @@ color = gutil.colors
 # CSS和雪碧图的相关path
 _jsPath     = config.jsSrcPath
 _jsDevPath  = config.jsOutPath
-_jsDistPath = config.jsDistPath
-_jsMapName  = config.jsMapName
-_mapPath    = config.mapPath
-_hashLen    = config.hashLength
-_isCombo    = config.isCombo
+# _jsDistPath = config.jsDistPath
+# _jsMapName  = config.jsMapName
+# _mapPath    = config.mapPath
+# _hashLen    = config.hashLength
+# _isCombo    = config.isCombo
 
 
 butil       = require './butil'

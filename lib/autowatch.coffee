@@ -14,6 +14,7 @@ cssbd   = require './cssbd'
 css2dist = require './cssto'
 htmlToJs  = require './html2js'
 htmlCtl   = require './htmlctl'
+phpCtl   = require './phpctl'
 jsto    = require './jsto'
 color   = gutil.colors
 
@@ -85,8 +86,14 @@ class checkFile extends watchChecker
     html:(cb)=>
         _type = @type()
         return false if _type isnt 'html'
-        gutil.log "Injecting HTML source files relative to HTML Template."
-        htmlCtl config,->
+        # gutil.log "Injecting HTML source files relative to HTML Template."
+        htmlCtl ->
+
+    php:(cb)=>
+        _type = @type()
+        return false if _type isnt 'php'
+        # gutil.log "Build php Template."
+        phpCtl ->
 
     less: (cb)=>
         _type = @type()
@@ -108,7 +115,8 @@ class checkFile extends watchChecker
         _type = @type()
         __js = @js
         __tpl = @tpl
-        __html = @html  
+        __html = @html
+        __php = @php
         __sp = @sprite
         __less = @less
         switch _type
@@ -118,6 +126,8 @@ class checkFile extends watchChecker
                 __tpl -> cb()
             when 'html'
                 __html -> cb()
+            when 'php'
+                __php -> cb()
             when 'png'
                 __sp -> cb()
             when 'less'
@@ -129,7 +139,7 @@ class checkFile extends watchChecker
 ###
 _autowatch = (cb)->
     _cb = cb or ->
-    _list = {}
+    _list = []
     _folder = []
     _path = config.watchFiles
     watch _path,(file)->
@@ -137,27 +147,26 @@ _autowatch = (cb)->
             _event = file.event
             return false if _event is 'undefined' or _event is 'unlink'
             _file_path = file.path.replace(/\\/g,'/')
-
             # 检测文件
             _checkfile = new checkFile(_file_path)
             _file_type = _checkfile.type()
             _file_folder = _checkfile.folder()
-            _list[_file_type] = []
             # 队列去重
-            if _file_path not in _list[_file_type]
+            if _file_path not in _list
                 gutil.log '\'' + color.cyan(file.relative) + '\'',"was #{_event}"
-                _list[_file_type].push _file_path
-                return false if (_file_type is 'tpl' or _file_type is 'png') and _file_folder in _folder
-                _folder.push _file_folder  
+                _list.push _file_path
+                if (_file_type is 'tpl' or _file_type is 'png') and _file_folder in _folder
+                    _folder.push _file_folder  
+                    # 执行文件的合并
+                    _checkfile.build -> _cb()
+                else
+                    _checkfile.build -> _cb()
 
-                # 执行文件的合并
-                _checkfile.build -> _cb()
-
-                # 清理队列
+            # 清理队列
             clearTimeout watch_timer if watch_timer
             watch_timer = setTimeout ->
                 # clear the list after 3 seconds
-                _list = {}
+                _list = []
                 _folder = []
             ,3000
         catch err

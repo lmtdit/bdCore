@@ -8,7 +8,7 @@
 
 fs = require 'fs'
 path = require 'path'
-_ = require 'lodash'
+# _ = require 'lodash'
 config = require './config'
 common = require './common'
 
@@ -38,7 +38,7 @@ module.exports = (folder,cb)->
             _source = fs.readFileSync(_file_path, 'utf8')
 
             # 给html中的图片链接加上Hash
-            file_source = _replaceImg(_source)
+            file_source = _replaceImg(_source,'tpl')
             # 压缩html
             file_source = _htmlMinify(file_source)
 

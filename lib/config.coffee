@@ -50,8 +50,11 @@ module.exports =
   # html模板路径
   htmlTplDist: cfg.htmlTplDist
 
+  # php模板输出路径
+  phpTplPath: cfg.phpTplPath
+
   # PHP版本map输出路径
-  phpMapPath: cfg.phpMapPath
+  phpMapPath: cfg.phpTplPath + 'map/pc/'
 
   # js文件前缀
   prefix: cfg.jsPrefix
@@ -70,7 +73,7 @@ module.exports =
   jsPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/js/" else "#{srcPath}/_js/")
 
   # 插入到页面中的全局变量
-  GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={};"
+  GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window.VARS={},sbLib=window.sbLib={},_VM_=window._VM_={};"
 
   # 一些gulp构建配置
   dataPath: './data'
@@ -80,6 +83,7 @@ module.exports =
   jsLibPath: '../' + srcPath + '/js/vendor/'
   docOutPath: '../' + srcPath + '/doc/'
   imgSrcPath: '../' + srcPath + '/_img/'
+  
 
   # 文件构建的生产目录
   cssDistPath: '../' + distPath + '/css/'
@@ -88,6 +92,9 @@ module.exports =
   imgDistPath: '../' + distPath + '/img/'
   spriteDistPath: '../' + distPath + '/img/sp/'
   cssBgDistPath: '../' + distPath + '/img/bg/'
+
+  # 独立的 widgets 控件
+  
 
   # 文件构建的Debug目录
   cssOutPath: '../' + srcPath + '/_css/'
@@ -98,7 +105,7 @@ module.exports =
   lessPath: '../' + srcPath + '/less/'
   jsSrcPath: '../' + srcPath + '/js/'
   tplSrcPath: '../' + srcPath + '/tpl/'
-  # tplJsSrcPath: path.join(st_root, 'tpl/')
+  phpSrcPath: '../' + srcPath + '/tpl_php/'
   spriteSrcPath: '../' + srcPath + '/sprite/'
   spriteLessOutPath: '../' + srcPath + '/less/sprite/'
   spriteImgOutPath: '../' + srcPath + '/_img/sp/'
@@ -109,6 +116,8 @@ module.exports =
   jsDistMapName: 'jslibs.json'
   cssMapName: 'cssmap.json'
   cssBgMap: 'cssbgmap.json'
+
+  jsHash: 'jsHash.json' #add by yy
   
   # 一个大坑啊。。。
   watchFiles: [
@@ -116,6 +125,7 @@ module.exports =
       '../' + srcPath + '/sprite/**/*.png'
       '../' + srcPath + '/less/**/*.less'
       '../' + srcPath + '/tpl/**/*.html'
+      '../' + srcPath + '/tpl_php/**/*.php'
       '../' + srcPath + '/'+ viewsDir + '**/*.html'
       '!../' + srcPath + '/**/.DS_Store'
     ]

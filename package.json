@@ -6,22 +6,10 @@
     "url": "https://github.com/lmtdit/v.builder"
   },
   "description": "v.builder is a front-end automation construction framework based on gulpJS",
-  "main": "gulpfile.js",
-  "license": "Apache version 2.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/lmtdit/v.builder.git"
-  },
-  "keywords": [
-    "v.builder",
-    "gulp"
-  ],
-  "engines": {
-    "node": ">=0.10.0"
-  },
   "devDependencies": {
     "amdclean": "2.7.0",
     "args": "0.0.3",
+    "async": "^1.3.0",
     "bluebird": "^2.9.25",
     "concat-stream": "1.4.8",
     "event-stream": "3.3.0",
@@ -49,9 +37,10 @@
     "yargs": "^3.10.0"
   },
   "scripts": {
-    "test": "cd build; gulp init"
+    "test": "cd build && gulp init"
   },
   "dependencies": {
+    "async": "^1.3.0",
     "imagemin": "^3.1.0"
   }
 }

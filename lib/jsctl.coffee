@@ -12,8 +12,8 @@ config  = require './config'
 # flctl   = require './flctl'
 _       = require 'lodash'
 amdclean = require 'amdclean'
-gulp    = require 'gulp'
-revall  = require 'gulp-rev-all'
+# gulp    = require 'gulp'
+# revall  = require 'gulp-rev-all'
 uglify  = require 'uglify-js'
 # _uglify = require 'gulp-uglify'
 # header  = require 'gulp-header'
@@ -28,6 +28,7 @@ errrHandler = butil.errrHandler
 md5         = butil.md5
 jsDistMapName = config.jsDistMapName
 rootPath    = config.rootPath
+_cacheCtrl  = require './cacheCtrl'
 
 # console.log info
 
@@ -112,6 +113,7 @@ filterDepMap = (depMap)->
 ### AMD模块的依赖构建工具类库 ###
 class jsDepBuilder
     srcPath: config.jsOutPath
+    coreMods: config.coreJsMods
     amdRegex: /;?\s*define\s*\(([^(]*),?\s*?function\s*\([^\)]*\)/
     depArrRegex: /^[^\[]*(\[[^\]\[]*\]).*$/
     # 单个文件的依赖表
@@ -135,9 +137,9 @@ class jsDepBuilder
         depMap = {}
         _srcPath = @srcPath
         _oneJsDep = @oneJsDep
+        # console.log _srcPath
         fs.readdirSync(_srcPath).forEach (v)->
             jsPath = path.join(_srcPath, v)
-            # if fs.statSync(jsPath).isDirectory()  and v isnt 'tpl'
             if fs.statSync(jsPath).isDirectory() and v isnt 'vendor'
                 fs.readdirSync(jsPath).forEach (f)->
                     if f.indexOf('.') != 0 and f.indexOf('.js') != -1
@@ -154,43 +156,58 @@ class jsDepBuilder
                                     # console.log "#{v}/#{f}/#{name_lv2}"
                                     fileDep = _oneJsDep(jsPath_lv2,ff)
                                     depMap["#{v}/#{f}/#{name_lv2}"] = fileDep
-
+        # console.log depMap
         return depMap
 
     # 生成每个文件的所有依赖列表
-    makeDeps: () =>
+    makeDeps: =>
+        _coreMods = @coreMods
         _allDeps = {}
         _depLibs = []
         _alljsDep = @allJsDep()
+        # console.log _alljsDep
         # 计算每个文件对应的依赖，递归算法
-        makeDep = (deps)-> 
-            # console.log deps
+        _makeDep = (deps)-> 
             _list = []
             make = (deps) ->
-                deps.forEach (dep) ->   
-                    currDeps = _alljsDep[dep]         
+                deps.forEach (dep)->
+                    currDeps = _alljsDep[dep]
+                    # console.log dep
                     if currDeps or dep.indexOf("/") != -1
                         make(currDeps)
                     _list.push(dep)
             make(deps)
             return _list
+            
+        # 过滤核心模块
+        _filter = (arr)->
+            _temp = []
+            for f in arr
+                _temp.push f if f not in _coreMods
+            return _temp
 
+        # 生成所有依赖链
         for file,depList of _alljsDep
             _allDeps[file] = {}
             _list = [] 
             _lib = []
-
             if depList.length > 0
-                _tempArr = makeDep(depList)
-                _tempArr = _.union _tempArr
+
+                # 过滤核心模块
+                _depList = _filter(depList)
+
+                # 生成依赖表
+                _tempArr = _makeDep(_depList)
+                _tempArr = _.union(_tempArr)
+
                 # 依赖排重                
-                for _file in _tempArr                    
+                for _file in _tempArr                
                     if _file not in _list and _file.indexOf("/") isnt -1 
                         _list.push(_file)
                     else
                         _lib.push(_file) if _file not in _lib
 
-                    _depLibs.push(_file) if _file.indexOf("/") is -1
+                    _depLibs.push(_file) if _file.indexOf("/") is -1 and _file not in _depLibs
 
             _allDeps[file] = {
                 modList: _list
@@ -237,7 +254,8 @@ class jsToDist extends jsDepBuilder
         _outName = config.coreJsName
         _coreMods = @coreMods
         _include = _.union _coreMods.concat(modules)
-        # console.log _include
+        gutil.log _include
+        # return false
         _paths = JSON.parse fs.readFileSync(path.join(config.dataPath, 'jslibs.json'), 'utf8')
         _shim = JSON.parse fs.readFileSync(path.join(config.dataPath, 'shim.json'), 'utf8')
         
@@ -250,9 +268,20 @@ class jsToDist extends jsDepBuilder
 
         _rjs.on 'data',(output)->
             _source = String(output.contents)
+            ###
             _buildJs _source,_outName,(map)->
                 _.assign jsHash,map
                 _cb()
+            ###
+
+            #add by yy  判断md5值
+            if not _cacheCtrl.checkHash(_outName,_source)
+                _buildJs _source,_outName,(map)->
+                    _.assign jsHash,map
+                    #add by yy 保存js模块的md5
+                    _cacheCtrl.saveHash()
+
+            _cb()
 
     ### 合并核心js模块 ### 
     coreModule: (cb)=>
@@ -260,6 +289,7 @@ class jsToDist extends jsDepBuilder
         _cb = cb or ->
         _makeDeps = @makeDeps()
         _depLibs = _makeDeps.depLibs
+        # console.log _makeDeps
         # 核心库队列
         @rjsBuilder _depLibs,-> _cb()
 
@@ -268,7 +298,7 @@ class jsToDist extends jsDepBuilder
         _cb = cb or ->
         _module_name = name
         # 过滤下划线的js模块
-        return _cb() if _module_name.indexOf("_") is 0
+        return _cb() if _module_name.indexOf("_/") is 0
 
         _num = 0
 
@@ -307,26 +337,32 @@ class jsToDist extends jsDepBuilder
         _cb = cb or ->
         _srcPath = @srcPath
         _allDeps = @makeDeps().allDeps
-        # console.log _cfg
-        _depList = _allDeps.modList
+        
         # 生成依赖
         _num = 0
         gutil.log color.yellow "Combine javascript modules! Waitting..."
         for module,deps of _allDeps
+            # console.log module
             # 过滤下划线的js模块
-            if module.indexOf("_") isnt 0
+            if module.indexOf("_") isnt 0 and module.indexOf("/_") is -1
                 _this_js = path.join(_srcPath, module + '.js')
                 _outName = @prefix + module.replace(/\//g,'_')
                 _jsData = []  
                 _modList = deps.modList
-                # console.log _modList
                 for f in _modList
                     _jsFile = path.join(_srcPath, f + '.js')
                     if fs.statSync(_jsFile).isFile() and f.indexOf('.') != 0
-                        _source = fs.readFileSync(_jsFile, 'utf8')
+                        
+                        #读取缓存
+                        _source = _cacheCtrl._readCache(_jsFile)
+                        if not _source
+                            _source = fs.readFileSync(_jsFile, 'utf8')
+                            _cacheCtrl._saveCache _jsFile,_source
+
                         _jsData.push _source + ';'
                 # 追加当前模块到队列的最后
                 _jsData.push fs.readFileSync(_this_js, 'utf8') + ';'
+                ###
                 gutil.log "Waitting..." if _num % 10 == 0 and _num > 1
                 try
                     _source = String(_jsData.join(''))
@@ -337,7 +373,22 @@ class jsToDist extends jsDepBuilder
                 catch error
                     gutil.log "Error: #{_outName}"
                     gutil.log error
-        _cb(_num)
+                ###
+
+                _source = String(_jsData.join(''))
+                #add by yy  判断md5值
+                if not _cacheCtrl.checkHash(_outName,_source)
+                    gutil.log "Waitting..." if _num % 10 == 0 and _num > 1
+                    try
+                        _buildJs _source,_outName,(map)->
+                            gutil.log "Combine",color.cyan("'#{module}'"),"---> #{_outName}"
+                            jsHash = _.assign jsHash,map
+                        _num++
+                    catch error
+                        gutil.log "Error: #{_outName}"
+                        gutil.log error
+
+        _cb(_num) 
 
     # build modules to dist
     init: (cb)=>
@@ -346,6 +397,10 @@ class jsToDist extends jsDepBuilder
         _modulesToDev (num)->
             gutil.log color.cyan(num),"javascript modules combined!"
             _buildJsDistMap jsHash
+
+            #add by yy 保存js模块的md5
+            _cacheCtrl.saveHash()
+             
             _cb()
 
     # build core module to dist
@@ -364,12 +419,20 @@ class jsToDist extends jsDepBuilder
         fs.readdirSync(_srcPath).forEach (v)->
             _jsFile = path.join(_srcPath, v)
             if fs.statSync(_jsFile).isFile() and v.indexOf('.') isnt 0
-                # console.log _jsFile
                 _source = fs.readFileSync(_jsFile, 'utf8')
                 _outName = v.replace('.js','')
+                ###
                 _buildJs _source,_outName,(map)->
                     jsHash = _.assign jsHash,map
                     _buildJsDistMap jsHash
+                ###
+                #add by yy  判断md5值
+                if not _cacheCtrl.checkHash(_outName,_source)
+                    _buildJs _source,_outName,(map)->
+                        jsHash = _.assign jsHash,map
+                        _buildJsDistMap jsHash
+                        #add by yy 保存js模块的md5
+                        _cacheCtrl.saveHash()
         _cb()
 
 
