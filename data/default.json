@@ -3,9 +3,9 @@
     "srcPathName": "_src",
     "distPathName": "assets",
     "htmlTplDist": "../html/",
-    "phpMapPath":"../../../shenba_php/shenba/map/",
+    "phpTplPath":"../../../shenba/shenba_templates/",
     "coreJs": {
-        "mods": ["jquery","smcore"],
+        "mods": ["jquery", "smcore"],
         "name": "corelibs"
     },
     "jsPrefix": "sb.",
@@ -16,10 +16,20 @@
             "cndDomain": "local.pcstatics.shenba.com",
             "WapSiteUrl": "local.pcstatics.shenba.com"
         },
+        "dev": {
+            "SiteUrl": "dev.pc.shenba.com",
+            "cndDomain": "dev.pcstatics.shenba.com",
+            "WapSiteUrl": "dev.pcstatics.shenba.com"
+        },
         "test": {
             "SiteUrl": "test.pc.shenba.com",
             "cndDomain": "test.pcstatics.shenba.com",
             "WapSiteUrl": "test.pcstatics.shenba.com"
+        },
+        "dev": {
+            "SiteUrl": "dev.pc.shenba.com",
+            "cndDomain": "dev.pcstatics.shenba.com",
+            "WapSiteUrl": "dev.pcstatics.shenba.com"
         },
         "rc": {
             "SiteUrl": "rc.pc.shenba.com",
