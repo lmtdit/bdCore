@@ -16,7 +16,7 @@
     "envs": {
         "local": {
             "SiteUrl": "local.pc.shenba.com",
-            "cndDomain": "local.pcstatics.shenba.com",
+            "cndDomain": "static.local",
             "WapSiteUrl": "local.pcstatics.shenba.com"
         },
         "test": {
