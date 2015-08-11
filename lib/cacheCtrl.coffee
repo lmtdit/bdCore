@@ -31,10 +31,10 @@ exports =
 
     #检测md5
     checkHash: (id,source) ->
-        #使用二进制转换  处理中文问题
-        buf = new Buffer(source)
-        str = buf.toString "binary"
-        _md5 = md5 str
+        # #使用二进制转换  处理中文问题
+        # buf = new Buffer(source)
+        # str = buf.toString "binary"
+        _md5 = md5 source
         _flag = false
 
         if @_hash[id] and @_hash[id] is _md5

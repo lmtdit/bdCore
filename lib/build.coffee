@@ -67,7 +67,7 @@ exports.files =
     delDistFiles: =>
         exports.files.delDistCss()
         exports.files.delDistJs()
-        # exports.files.delDistSpImg()
+        exports.files.delDistSpImg()
         # exports.files.delMap()
 
 ###

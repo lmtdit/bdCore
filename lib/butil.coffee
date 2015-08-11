@@ -21,8 +21,11 @@ queryStr = require "querystring"
 
 Tools = {}
 # md5 hash
-Tools.md5 = (text) ->
-    crypto.createHash('md5').update(text).digest('hex')
+Tools.md5 = (source) ->
+    # 使用二进制转换，解决中文摘要计算不准的问题
+    _buf = new Buffer(source)
+    _str = _buf.toString "binary"
+    crypto.createHash('md5').update(_str).digest('hex')
 
 # 错误报警,beep响两声
 Tools.errrHandler = (e) ->
