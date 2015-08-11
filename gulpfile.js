@@ -332,13 +332,14 @@ release = function() {
   _startTime = (new Date()).getTime();
   releaseTask = new taskCtrl({
     drain: function() {
-      gutil.log(color.cyan("构建map..."));
+      gutil.log(color.cyan("构建Html..."));
       return setTimeout(function() {
-        var _endTime;
-        build.json2php();
-        gutil.log(color.cyan("构建完成，可以发版了..."));
-        _endTime = (new Date()).getTime();
-        return gutil.log(color.cyan("耗时：" + (_endTime - _startTime) / 1000 + 's...'));
+        return build.htmlctl(function() {
+          var _endTime;
+          gutil.log(color.cyan("构建完成，可以发版了..."));
+          _endTime = (new Date()).getTime();
+          return gutil.log(color.cyan("耗时：" + (_endTime - _startTime) / 1000 + 's...'));
+        });
       }, 2000);
     }
   });

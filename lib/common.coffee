@@ -40,16 +40,12 @@ exports.replaceImg = (source,type)->
     file_source = source.replace imgReg,(str)->
         map = ''
         str.replace srcReg,(s)->
-          map = s.replace(/^src=/,'').replace(/(\'|\")|(\'|\"$)/g, '')
-        if map.indexOf('/_img/') isnt 0 or map.indexOf('http://') is 0 or map.indexOf('data:') is 0 or map.indexOf('/<?php/') isnt 0
+            map = s.replace(/^src=/,'').replace(/(\'|\")|(\'|\"$)/g, '')
+        if map.indexOf('/_img/') isnt 0 or map.indexOf('http://') is 0 or map.indexOf('data:') is 0 or map.indexOf('/<?php/') isnt -1
             return str
-        else if _type is 'tpl'
-            key = map.replace('/_img/', '').replace(/(^\'|\")|(\'|\"$)/g, '')
-            val = imgPath + key + '?=t' + String(new Date().getTime()).substr(0,8)
-            return str.replace(map, val)
         else
             key = map.replace('/_img/', '').replace(/(^\'|\")|(\'|\"$)/g, '')
-            val = imgPath + (if _.has(cssBgMap,key) then cssBgMap[key].distname else key + '?=t' + String(new Date().getTime()).substr(0,8))
+            val = imgPath + (if _.has(cssBgMap,key) and env isnt 'local' then cssBgMap[key].distname else key + '?=t' + String(new Date().getTime()).substr(0,8))
             # console.log "#{map}--> #{val}"
             return str.replace(map, val)
     return  file_source

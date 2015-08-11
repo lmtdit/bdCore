@@ -66,6 +66,7 @@ module.exports =
   coreJsMods: cfg.coreJs.mods
 
   # 静态路径
+  localStaticPath: "http://#{_envs['local'].cndDomain}/"
   staticRoot: "http://#{cndDomain}/"
   staticPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/" else "#{srcPath}/")
   imgPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/img/" else "#{srcPath}/_img/")
@@ -73,7 +74,7 @@ module.exports =
   jsPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/js/" else "#{srcPath}/_js/")
 
   # 插入到页面中的全局变量
-  GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window.VARS={},sbLib=window.sbLib={},_VM_=window._VM_={};"
+  GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={},SiteUrl='#{SiteUrl}',ApiUrl ='//#{WapSiteUrl}/app',WapSiteUrl='//#{WapSiteUrl}',AndroidSiteUrl='#{cfg.AndroidAppUrl}',iosAppUrl='#{cfg.iosAppUrl}',pagesize='#{cfg.pagesize}';"
 
   # 一些gulp构建配置
   dataPath: './data'

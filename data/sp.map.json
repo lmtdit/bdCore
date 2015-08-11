@@ -1,1 +1,8 @@
-{}
+{
+    "common": [
+        "pay_ok.png",
+        "star.png",
+        "star_metro_orang.png",
+        "star_metro_orang2.png"
+    ]
+}

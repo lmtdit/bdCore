@@ -213,7 +213,7 @@ exports.cfg = (cb)->
         if key isnt 'require' and key isnt 'almond'
             newPaths[key] = val
     rCfg =
-        baseUrl: config.staticRoot + '_src/_js'
+        baseUrl: config.localStaticPath + '_src/_js'
         paths: _.extend newPaths,jsPaths
         shim: shimData
         

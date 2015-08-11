@@ -254,11 +254,11 @@ release = ()->
     _startTime = (new Date()).getTime()
     releaseTask = new taskCtrl
         drain: ->#结束后执行监听
-            gutil.log color.cyan "构建map..."
+            gutil.log color.cyan "构建Html..."
             setTimeout ->
-                #build.json2dist ->
+                build.htmlctl ->
                     #build.phpctl ->
-                        build.json2php()
+                        #build.json2php()
                         gutil.log color.cyan "构建完成，可以发版了..."
                         _endTime = (new Date()).getTime()
                         gutil.log color.cyan "耗时："+(_endTime-_startTime)/1000 +'s...'
