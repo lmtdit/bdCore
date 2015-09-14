@@ -12,12 +12,15 @@ Buffer  = require("buffer").Buffer
 md5     = butil.md5
 _oldHash = {}
 _hashFile = path.join(config.mapPath, config.jsHash)
+_jsLibs = {}
+_jsLibsFile = path.join(config.mapPath, config.jsDistMapName)
 
 if not fs.existsSync(_hashFile)
     fs.writeFileSync _hashFile,'{}','utf8'
 
 try
-    _oldHash = JSON.parse fs.readFileSync(_hashFile, 'utf8')
+    _oldHash = JSON.parse fs.readFileSync _hashFile,'utf8'
+    _jsLibs =  JSON.parse fs.readFileSync _jsLibsFile,'utf8'
 catch e
     # ...
 
@@ -35,9 +38,10 @@ exports =
         # buf = new Buffer(source)
         # str = buf.toString "binary"
         _md5 = md5 source
+        _name = id + '.js'
         _flag = false
 
-        if @_hash[id] and @_hash[id] is _md5
+        if @_hash[id] and @_hash[id] is _md5 and _jsLibs[_name]
             _flag = true
         else
             @_hash[id] = _md5

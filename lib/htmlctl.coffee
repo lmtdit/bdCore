@@ -33,7 +33,7 @@ minifyHTML = require('gulp-minify-html')
 # catch e
 #     # ...
 
-_hashMaps = common.hashMaps
+#_hashMaps = common.hashMaps
 _replaceImg = common.replaceImg
 _htmlMinify = common.htmlMinify
 
@@ -44,10 +44,9 @@ _buildHtml = (data)->
         return false if _path.indexOf("/#{config.views}_") > -1
         _name = _path.split("/#{config.srcPath}/#{config.views}")[1]
         _outputPath = path.join(config.htmlTplDist, _name)
-
+        _source = String(data.contents)
         # 给html中的图片链接加上Hash
-        _source = _replaceImg(String(data.contents))
-
+        _source = _replaceImg(_source)
         # 如果不是开发环境，则压缩html
         if config.env isnt 'local'
             _source = _htmlMinify(_source)
@@ -67,6 +66,10 @@ module.exports = (file,cb)->
         cb = cb or ->
 
     gutil.log color.yellow "Combine html templates..."
+
+    # 获取hash
+    _hashMaps = common.getHashMaps()
+
     # html模板引擎配置
     opts = 
         prefix: '@@'

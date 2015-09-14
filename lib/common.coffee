@@ -34,6 +34,29 @@ srcReg = /src=('|")([^'|^"]*)('|")/
 # Mixin hashMaps
 exports.hashMaps = butil.objMixin jsdistmap,cssmap
 
+exports.getHashMaps = ->
+    _jsdistmap = {}
+    _cssmap = {}
+
+    try
+        _cssBgMap    = getJSONSync path.join(config.mapPath, config.cssBgMap)
+        _jsdistmap   = getJSONSync path.join(config.mapPath, config.jsDistMapName)
+        _cssmap      = getJSONSync path.join(config.mapPath, config.cssMapName)
+    catch e
+        # ...
+
+    _hashMaps = butil.objMixin _jsdistmap,_cssmap
+
+    return _hashMaps
+
+exports.refCssBgMap = (map) ->
+    if map
+        cssBgMap = map
+        exports.cssBgMap = map
+
+exports.getCssBgMap = ->
+    return cssBgMap
+
 # replace img tags with hash
 exports.replaceImg = (source,type)->
     _type = type or ''

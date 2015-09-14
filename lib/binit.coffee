@@ -21,6 +21,8 @@ mapPath     = config.mapPath
 
 Imagemin = require('imagemin')
 
+common  = require './common'
+
 ###
 # init dist and cache DIRS
 ###
@@ -121,6 +123,8 @@ exports.bgmap = (cb)->
     not fs.existsSync(mapPath) and butil.mkdirsSync(mapPath)
     fs.writeFileSync path.join(mapPath, config.cssBgMap), jsonData, 'utf8'
     gutil.log color.green "#{config.cssBgMap} build success"
+    #更新cssBgMap
+    common.refCssBgMap _map
     _cb()
 
 ###

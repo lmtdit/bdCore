@@ -50,11 +50,8 @@ module.exports =
   # html模板路径
   htmlTplDist: cfg.htmlTplDist
 
-  # php模板输出路径
-  phpTplPath: cfg.phpTplPath
-
   # PHP版本map输出路径
-  phpMapPath: cfg.phpTplPath + 'map/pc/'
+  phpMapPath: cfg.phpMapPath
 
   # js文件前缀
   prefix: cfg.jsPrefix
@@ -66,7 +63,6 @@ module.exports =
   coreJsMods: cfg.coreJs.mods
 
   # 静态路径
-  localStaticPath: "http://#{_envs['local'].cndDomain}/"
   staticRoot: "http://#{cndDomain}/"
   staticPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/" else "#{srcPath}/")
   imgPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/img/" else "#{srcPath}/_img/")
@@ -84,7 +80,6 @@ module.exports =
   jsLibPath: '../' + srcPath + '/js/vendor/'
   docOutPath: '../' + srcPath + '/doc/'
   imgSrcPath: '../' + srcPath + '/_img/'
-  
 
   # 文件构建的生产目录
   cssDistPath: '../' + distPath + '/css/'
@@ -93,9 +88,6 @@ module.exports =
   imgDistPath: '../' + distPath + '/img/'
   spriteDistPath: '../' + distPath + '/img/sp/'
   cssBgDistPath: '../' + distPath + '/img/bg/'
-
-  # 独立的 widgets 控件
-  
 
   # 文件构建的Debug目录
   cssOutPath: '../' + srcPath + '/_css/'
@@ -106,7 +98,7 @@ module.exports =
   lessPath: '../' + srcPath + '/less/'
   jsSrcPath: '../' + srcPath + '/js/'
   tplSrcPath: '../' + srcPath + '/tpl/'
-  phpSrcPath: '../' + srcPath + '/tpl_php/'
+  # tplJsSrcPath: path.join(st_root, 'tpl/')
   spriteSrcPath: '../' + srcPath + '/sprite/'
   spriteLessOutPath: '../' + srcPath + '/less/sprite/'
   spriteImgOutPath: '../' + srcPath + '/_img/sp/'
@@ -117,16 +109,17 @@ module.exports =
   jsDistMapName: 'jslibs.json'
   cssMapName: 'cssmap.json'
   cssBgMap: 'cssbgmap.json'
-
   jsHash: 'jsHash.json' #add by yy
-  
+
   # 一个大坑啊。。。
   watchFiles: [
+      '../' + srcPath + '/js/*.js'
       '../' + srcPath + '/js/**/*.js'
       '../' + srcPath + '/sprite/**/*.png'
+      '../' + srcPath + '/less/*.less'
       '../' + srcPath + '/less/**/*.less'
       '../' + srcPath + '/tpl/**/*.html'
-      '../' + srcPath + '/tpl_php/**/*.php'
+      '../' + srcPath + '/'+ viewsDir + '*.html'
       '../' + srcPath + '/'+ viewsDir + '**/*.html'
       '!../' + srcPath + '/**/.DS_Store'
     ]

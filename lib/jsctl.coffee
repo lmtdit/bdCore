@@ -410,6 +410,8 @@ class jsToDist extends jsDepBuilder
         _coreModule ->
             gutil.log '\'' + color.cyan("#{config.coreJsName}") + '\'',"combined!"
             _buildJsDistMap jsHash
+            #add by yy 保存js模块的md5
+            _cacheCtrl.saveHash()
             _cb()
 
     # 处理非AMD模块的js，并生成map
