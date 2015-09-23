@@ -220,7 +220,6 @@ exports.cfg = (cb)->
         baseUrl: config.localStaticPath + '_src/_js'
         paths: _.extend newPaths,jsPaths
         shim: shimData
-        
     jsSrcPath = config.jsSrcPath
     require_cfg = "require.config(#{JSON.stringify(rCfg, null, 2)});"
     fs.writeFileSync path.join(jsSrcPath, "require_cfg.js"), require_cfg, 'utf8'

@@ -68,9 +68,14 @@ module.exports =
   imgPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/img/" else "#{srcPath}/_img/")
   cssPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/css/" else "#{srcPath}/_css/")
   jsPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/js/" else "#{srcPath}/_js/")
+  localStaticPath: "http://#{_envs['local'].cndDomain}/"
+
+  localStaticPath: "http://#{_envs['local'].cndDomain}/"
 
   # 插入到页面中的全局变量
+  # GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={};"
   GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={},SiteUrl='#{SiteUrl}',ApiUrl ='//#{WapSiteUrl}/app',WapSiteUrl='//#{WapSiteUrl}',AndroidSiteUrl='#{cfg.AndroidAppUrl}',iosAppUrl='#{cfg.iosAppUrl}',pagesize='#{cfg.pagesize}';"
+
 
   # 一些gulp构建配置
   dataPath: './data'
