@@ -70,8 +70,6 @@ module.exports =
   jsPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/js/" else "#{srcPath}/_js/")
   localStaticPath: "http://#{_envs['local'].cndDomain}/"
 
-  localStaticPath: "http://#{_envs['local'].cndDomain}/"
-
   # 插入到页面中的全局变量
   # GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={};"
   GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={},SiteUrl='#{SiteUrl}',ApiUrl ='//#{WapSiteUrl}/app',WapSiteUrl='//#{WapSiteUrl}',AndroidSiteUrl='#{cfg.AndroidAppUrl}',iosAppUrl='#{cfg.iosAppUrl}',pagesize='#{cfg.pagesize}';"
