@@ -1,7 +1,6 @@
 {
-  "Zepto": "vendor/Zepto/zepto",
+  "jquery": "vendor/jquery/jquery",
   "require": "vendor/require/require",
   "smcore": "vendor/smcore/smcore",
-  "template": "vendor/template/template",
   "underscore": "vendor/underscore/underscore"
 }

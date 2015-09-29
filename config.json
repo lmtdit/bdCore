@@ -2,12 +2,12 @@
     "isCombo": false,
     "srcPathName": "_src",
     "distPathName": "assets",
-    "htmlTplDist": "../../../shenba/m.shenba.com/",
-    "phpTplPath": "../../shenba_v2.0/shenba_templates/",
+    "htmlTplDist": "../html/",
+    "phpTplPath": "../../../shenba/shenba_templates/",
     "coreJs": {
         "mods": [
-            "Zepto",
-            "template"
+            "jquery",
+            "smcore"
         ],
         "name": "corelibs"
     },

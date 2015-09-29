@@ -51,7 +51,7 @@ module.exports =
   htmlTplDist: cfg.htmlTplDist
 
   # PHP版本map输出路径
-  phpMapPath: cfg.phpMapPath
+  phpMapPath: cfg.phpTplPath + 'map/pc/'
 
   # js文件前缀
   prefix: cfg.jsPrefix

@@ -2,17 +2,12 @@
     "isCombo": false,
     "srcPathName": "_src",
     "distPathName": "assets",
-<<<<<<< HEAD
     "htmlTplDist": "../html/",
-    "phpMapPath": "../../../shenbaPHP/shenba_templates/map/pc/",
-=======
-    "htmlTplDist": "../../../shenba/m.shenba.com/",
     "phpTplPath": "../../../shenba/shenba_templates/",
->>>>>>> 0ac58d8364cb6120db94dfa27bb995eeb2eab7aa
     "coreJs": {
         "mods": [
-            "Zepto",
-            "template"
+            "jquery",
+            "smcore"
         ],
         "name": "corelibs"
     },
@@ -24,27 +19,27 @@
     "envs": {
         "local": {
             "SiteUrl": "local.pc.shenba.com",
-            "cndDomain": "local.mstatics.shenba.com",
+            "cndDomain": "local.pcstatics.shenba.com",
             "WapSiteUrl": "local.m.shenba.com"
         },
         "dev": {
             "SiteUrl": "dev.pc.shenba.com",
-            "cndDomain": "dev.mstatics.shenba.com",
+            "cndDomain": "dev.pcstatics.shenba.com",
             "WapSiteUrl": "dev.m.shenba.com"
         },
         "test": {
             "SiteUrl": "test.pc.shenba.com",
-            "cndDomain": "test.mstatics.shenba.com",
+            "cndDomain": "test.pcstatics.shenba.com",
             "WapSiteUrl": "test.m.shenba.com"
         },
         "rc": {
             "SiteUrl": "rc.pc.shenba.com",
-            "cndDomain": "rc.mstatics.shenba.com",
+            "cndDomain": "rc.pcstatics.shenba.com",
             "WapSiteUrl": "rc.m.shenba.com"
         },
         "www": {
             "SiteUrl": "www.shenba.com",
-            "cndDomain": "mstatics.shenba.com",
+            "cndDomain": "pcstatics.shenba.com",
             "WapSiteUrl": "m.shenba.com"
         }
     }

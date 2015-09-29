@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
     "cart": [
         "abc.png",
         "add.png",
@@ -305,12 +304,5 @@
         "user-focus.png",
         "user.png",
         "verified.png"
-=======
-    "common": [
-        "pay_ok.png",
-        "star.png",
-        "star_metro_orang.png",
-        "star_metro_orang2.png"
->>>>>>> 0ac58d8364cb6120db94dfa27bb995eeb2eab7aa
     ]
 }
