@@ -33,7 +33,7 @@ minifyHTML = require('gulp-minify-html')
 # catch e
 #     # ...
 
-_hashMaps = common.hashMaps
+#_hashMaps = common.hashMaps
 _replaceImg = common.replaceImg
 _htmlMinify = common.htmlMinify
 
@@ -67,6 +67,10 @@ module.exports = (file,cb)->
         cb = cb or ->
 
     gutil.log color.yellow "Combine html templates..."
+
+    # 获取hash
+    _hashMaps = common.getHashMaps()
+    
     # html模板引擎配置
     opts = 
         prefix: '@@'

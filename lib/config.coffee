@@ -50,9 +50,6 @@ module.exports =
   # html模板路径
   htmlTplDist: cfg.htmlTplDist
 
-  # php模板输出路径
-  phpTplPath: cfg.phpTplPath
-
   # PHP版本map输出路径
   phpMapPath: cfg.phpTplPath + 'map/pc/'
 
@@ -73,7 +70,7 @@ module.exports =
   jsPath: "http://#{cndDomain}/" + (if _isDebug or _env != "local" then "#{distPath}/js/" else "#{srcPath}/_js/")
 
   # 插入到页面中的全局变量
-  GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window.VARS={},sbLib=window.sbLib={},_VM_=window._VM_={};"
+  GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={};"
 
   # 一些gulp构建配置
   dataPath: './data'
@@ -83,7 +80,6 @@ module.exports =
   jsLibPath: '../' + srcPath + '/js/vendor/'
   docOutPath: '../' + srcPath + '/doc/'
   imgSrcPath: '../' + srcPath + '/_img/'
-  
 
   # 文件构建的生产目录
   cssDistPath: '../' + distPath + '/css/'
@@ -105,7 +101,7 @@ module.exports =
   lessPath: '../' + srcPath + '/less/'
   jsSrcPath: '../' + srcPath + '/js/'
   tplSrcPath: '../' + srcPath + '/tpl/'
-  phpSrcPath: '../' + srcPath + '/tpl_php/'
+  # tplJsSrcPath: path.join(st_root, 'tpl/')
   spriteSrcPath: '../' + srcPath + '/sprite/'
   spriteLessOutPath: '../' + srcPath + '/less/sprite/'
   spriteImgOutPath: '../' + srcPath + '/_img/sp/'
@@ -122,10 +118,11 @@ module.exports =
   # 一个大坑啊。。。
   watchFiles: [
       '../' + srcPath + '/js/**/*.js'
+      '../' + srcPath + '/js/*.js'
       '../' + srcPath + '/sprite/**/*.png'
       '../' + srcPath + '/less/**/*.less'
+      '../' + srcPath + '/less/*.less'
       '../' + srcPath + '/tpl/**/*.html'
-      '../' + srcPath + '/tpl_php/**/*.php'
       '../' + srcPath + '/'+ viewsDir + '**/*.html'
       '!../' + srcPath + '/**/.DS_Store'
     ]
