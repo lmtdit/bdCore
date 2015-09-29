@@ -51,7 +51,7 @@ module.exports =
   htmlTplDist: cfg.htmlTplDist
 
   # PHP版本map输出路径
-  phpMapPath: cfg.phpTplPath + 'map/pc/'
+  phpMapPath: cfg.phpMapPath
 
   # js文件前缀
   prefix: cfg.jsPrefix
@@ -71,6 +71,7 @@ module.exports =
 
   # 插入到页面中的全局变量
   GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={};"
+  # GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={},SiteUrl='#{SiteUrl}',ApiUrl ='//#{WapSiteUrl}/app',WapSiteUrl='//#{WapSiteUrl}',AndroidSiteUrl='#{cfg.AndroidAppUrl}',iosAppUrl='#{cfg.iosAppUrl}',pagesize='#{cfg.pagesize}';"
 
   # 一些gulp构建配置
   dataPath: './data'
@@ -88,9 +89,6 @@ module.exports =
   imgDistPath: '../' + distPath + '/img/'
   spriteDistPath: '../' + distPath + '/img/sp/'
   cssBgDistPath: '../' + distPath + '/img/bg/'
-
-  # 独立的 widgets 控件
-  
 
   # 文件构建的Debug目录
   cssOutPath: '../' + srcPath + '/_css/'
@@ -112,17 +110,19 @@ module.exports =
   jsDistMapName: 'jslibs.json'
   cssMapName: 'cssmap.json'
   cssBgMap: 'cssbgmap.json'
-
   jsHash: 'jsHash.json' #add by yy
-  
+
   # 一个大坑啊。。。
   watchFiles: [
+      '../' + srcPath + '/js/*.js'
       '../' + srcPath + '/js/**/*.js'
       '../' + srcPath + '/js/*.js'
       '../' + srcPath + '/sprite/**/*.png'
+      '../' + srcPath + '/less/*.less'
       '../' + srcPath + '/less/**/*.less'
       '../' + srcPath + '/less/*.less'
       '../' + srcPath + '/tpl/**/*.html'
+      '../' + srcPath + '/'+ viewsDir + '*.html'
       '../' + srcPath + '/'+ viewsDir + '**/*.html'
       '!../' + srcPath + '/**/.DS_Store'
     ]

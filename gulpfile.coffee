@@ -193,6 +193,7 @@ release = ()->
                             build.js2dist ->
                                 gutil.log color.cyan "构建map..."
                                 setTimeout ->
+<<<<<<< HEAD
                                     #build.json2dist ->
                                         build.json2php()
                                         gutil.log color.cyan "构建完成，可以发版了..."
@@ -201,11 +202,23 @@ release = ()->
                                         gutil.log color.cyan "耗时："+(_endTime-_startTime)/1000 +'s...'
                                 ,2000
     
+=======
+                                    build.json2dist ->
+                                        #build.json2php()
+                                        build.htmlctl ->
+                                            gutil.log color.cyan "构建完成，可以发版了..."
+                                            _endTime = (new Date()).getTime()
+                                            gutil.log color.cyan "耗时："+(_endTime-_startTime)/1000 +'s...'
+                                ,2000    
+>>>>>>> 0ac58d8364cb6120db94dfa27bb995eeb2eab7aa
 
 gulp.task 'default',[], ->
     # 开发环境的构建命令
     if env == 'local' and !isDebug
+<<<<<<< HEAD
         ######
+=======
+>>>>>>> 0ac58d8364cb6120db94dfa27bb995eeb2eab7aa
         setTimeout ->
             build.less ->
                 build.js ->

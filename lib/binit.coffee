@@ -123,7 +123,11 @@ exports.bgmap = (cb)->
     not fs.existsSync(mapPath) and butil.mkdirsSync(mapPath)
     fs.writeFileSync path.join(mapPath, config.cssBgMap), jsonData, 'utf8'
     gutil.log color.green "#{config.cssBgMap} build success"
+<<<<<<< HEAD
      #更新cssBgMap
+=======
+    #更新cssBgMap
+>>>>>>> 0ac58d8364cb6120db94dfa27bb995eeb2eab7aa
     common.refCssBgMap _map
     _cb()
 
@@ -217,7 +221,7 @@ exports.cfg = (cb)->
         if key isnt 'require' and key isnt 'almond'
             newPaths[key] = val
     rCfg =
-        baseUrl: config.staticRoot + '_src/_js'
+        baseUrl: config.localStaticPath + '_src/_js'
         paths: _.extend newPaths,jsPaths
         shim: shimData
         

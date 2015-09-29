@@ -2,44 +2,50 @@
     "isCombo": false,
     "srcPathName": "_src",
     "distPathName": "assets",
+<<<<<<< HEAD
     "htmlTplDist": "../html/",
     "phpMapPath": "../../../shenbaPHP/shenba_templates/map/pc/",
+=======
+    "htmlTplDist": "../../../shenba/m.shenba.com/",
+    "phpTplPath": "../../../shenba/shenba_templates/",
+>>>>>>> 0ac58d8364cb6120db94dfa27bb995eeb2eab7aa
     "coreJs": {
-        "mods": ["jquery", "smcore"],
+        "mods": [
+            "Zepto",
+            "template"
+        ],
         "name": "corelibs"
     },
     "jsPrefix": "sb.",
     "hashLength": 10,
+    "pagesize": 10,
+    "AndroidAppUrl": "http://a.app.qq.com/o/simple.jsp?pkgname=com.shenba.market",
+    "iosAppUrl": "https://itunes.apple.com/us/app/shen-ba-mu-ying-te-mai-gou/id997307636?l=zh&ls=1&mt=8",
     "envs": {
         "local": {
             "SiteUrl": "local.pc.shenba.com",
-            "cndDomain": "local.pcstatics.shenba.com",
-            "WapSiteUrl": "local.pcstatics.shenba.com"
+            "cndDomain": "local.mstatics.shenba.com",
+            "WapSiteUrl": "local.m.shenba.com"
         },
         "dev": {
             "SiteUrl": "dev.pc.shenba.com",
-            "cndDomain": "dev.pcstatics.shenba.com",
-            "WapSiteUrl": "dev.pcstatics.shenba.com"
+            "cndDomain": "dev.mstatics.shenba.com",
+            "WapSiteUrl": "dev.m.shenba.com"
         },
         "test": {
             "SiteUrl": "test.pc.shenba.com",
-            "cndDomain": "test.pcstatics.shenba.com",
-            "WapSiteUrl": "test.pcstatics.shenba.com"
-        },
-        "dev": {
-            "SiteUrl": "dev.pc.shenba.com",
-            "cndDomain": "dev.pcstatics.shenba.com",
-            "WapSiteUrl": "dev.pcstatics.shenba.com"
+            "cndDomain": "test.mstatics.shenba.com",
+            "WapSiteUrl": "test.m.shenba.com"
         },
         "rc": {
             "SiteUrl": "rc.pc.shenba.com",
-            "cndDomain": "rc.pcstatics.shenba.com",
-            "WapSiteUrl": "rc.pcstatics.shenba.com"
+            "cndDomain": "rc.mstatics.shenba.com",
+            "WapSiteUrl": "rc.m.shenba.com"
         },
         "www": {
             "SiteUrl": "www.shenba.com",
-            "cndDomain": "pcstatics.shenba.com",
-            "WapSiteUrl": "pcstatics.shenba.com"
+            "cndDomain": "mstatics.shenba.com",
+            "WapSiteUrl": "m.shenba.com"
         }
     }
 }

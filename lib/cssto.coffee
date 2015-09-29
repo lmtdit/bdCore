@@ -29,14 +29,18 @@ butil       = require './butil'
 errrHandler = butil.errrHandler
 md5         = butil.md5
 
+common  = require './common'
+###
 cssBgMap = {}
 try
     cssBgMap = JSON.parse fs.readFileSync(path.join(_mapPath, config.cssBgMap), 'utf8')
 catch e
     # ...
+###
 
 # 替换css的背景图片，加上hash
 _stream = (files,cb,cb2)->
+    cssBgMap = common.getCssBgMap()
     _cssOutPath = path.join config.rootPath,config.cssOutPath
     _cndPath = config.cndStaticPath + 'css/'
     gulp.src [files]

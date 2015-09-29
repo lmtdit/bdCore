@@ -238,11 +238,22 @@ release = function() {
               return build.js2dist(function() {
                 gutil.log(color.cyan("构建map..."));
                 return setTimeout(function() {
+<<<<<<< HEAD
                   var _endTime;
                   build.json2php();
                   gutil.log(color.cyan("构建完成，可以发版了..."));
                   _endTime = (new Date()).getTime();
                   return gutil.log(color.cyan("耗时：" + (_endTime - _startTime) / 1000 + 's...'));
+=======
+                  return build.json2dist(function() {
+                    return build.htmlctl(function() {
+                      var _endTime;
+                      gutil.log(color.cyan("构建完成，可以发版了..."));
+                      _endTime = (new Date()).getTime();
+                      return gutil.log(color.cyan("耗时：" + (_endTime - _startTime) / 1000 + 's...'));
+                    });
+                  });
+>>>>>>> 0ac58d8364cb6120db94dfa27bb995eeb2eab7aa
                 }, 2000);
               });
             });
