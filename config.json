@@ -2,7 +2,7 @@
     "isCombo": false,
     "srcPathName": "_src",
     "distPathName": "assets",
-    "htmlTplDist": "../h5.shenba.com/view",
+    "htmlTplDist": "../../h5.shenba.com/views",
     "phpTplPath": "../h5.shenba.com/view",
     "coreJs": {
         "mods": [
@@ -19,28 +19,33 @@
     "envs": {
         "local": {
             "SiteUrl": "local.pc.shenba.com",
-            "cndDomain": "local.mstatics.shenba.com",
-            "WapSiteUrl": "local.m.shenba.com"
+            "cndDomain": "local.h5statics.shenba.com",
+            "WapSiteUrl": "local.h5.shenba.com",
+            "RealWapSiteUrl": "local.m.shenba.com"
         },
         "dev": {
             "SiteUrl": "dev.pc.shenba.com",
-            "cndDomain": "dev.mstatics.shenba.com",
-            "WapSiteUrl": "dev.m.shenba.com"
+            "cndDomain": "dev.h5statics.shenba.com",
+            "WapSiteUrl": "dev.h5.shenba.com",
+            "RealWapSiteUrl": "dev.m.shenba.com"
         },
         "test": {
             "SiteUrl": "test.pc.shenba.com",
-            "cndDomain": "test.mstatics.shenba.com",
-            "WapSiteUrl": "test.m.shenba.com"
+            "cndDomain": "test.h5statics.shenba.com",
+            "WapSiteUrl": "test.h5.shenba.com",
+            "RealWapSiteUrl": "test.m.shenba.com"
         },
         "rc": {
             "SiteUrl": "rc.pc.shenba.com",
-            "cndDomain": "rc.mstatics.shenba.com",
-            "WapSiteUrl": "rc.m.shenba.com"
+            "cndDomain": "local.h5statics.shenba.com",
+            "WapSiteUrl": "rc.h5.shenba.com",
+            "RealWapSiteUrl": "rc.m.shenba.com"
         },
         "www": {
             "SiteUrl": "www.shenba.com",
-            "cndDomain": "mstatics.shenba.com",
-            "WapSiteUrl": "m.shenba.com"
+            "cndDomain": "h5statics.shenba.com",
+            "WapSiteUrl": "h5.shenba.com",
+            "RealWapSiteUrl": "m.shenba.com"
         }
     }
 }

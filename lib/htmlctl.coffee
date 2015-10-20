@@ -49,7 +49,7 @@ _buildHtml = (data)->
         _source = _replaceImg(_source)
         # 如果不是开发环境，则压缩html
         if config.env isnt 'local'
-            _source = _htmlMinify(_source)
+            # _source = _htmlMinify(_source)
             gutil.log color.cyan("'#{_name}'"),"combined."
                            
         butil.mkdirsSync(path.dirname(_outputPath))

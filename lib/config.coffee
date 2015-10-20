@@ -27,6 +27,7 @@ distPath = cfg.distPathName
 SiteUrl = _envs[_env].SiteUrl
 cndDomain = _envs[_env].cndDomain
 WapSiteUrl = _envs[_env].WapSiteUrl
+RealWapSiteUrl = _envs[_env].RealWapSiteUrl
 
 module.exports =
   # 开发环境 
@@ -72,7 +73,7 @@ module.exports =
 
   # 插入到页面中的全局变量
   # GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={};"
-  GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={},SiteUrl='#{SiteUrl}',ApiUrl ='//#{WapSiteUrl}/app',WapSiteUrl='//#{WapSiteUrl}',AndroidSiteUrl='#{cfg.AndroidAppUrl}',iosAppUrl='#{cfg.iosAppUrl}',pagesize='#{cfg.pagesize}';"
+  GLOBALVAR: "var STATIC_PATH='http://#{cndDomain}/" + (if cfg.evn is "local" then srcPath else distPath) + "',VARS=window['VARS']={},_VM_=window['_VM_']={},SiteUrl='#{SiteUrl}',ApiUrl ='//#{WapSiteUrl}',WapSiteUrl='//#{WapSiteUrl}',RealWapSiteUrl='//#{RealWapSiteUrl}',AndroidSiteUrl='#{cfg.AndroidAppUrl}',iosAppUrl='#{cfg.iosAppUrl}',pagesize='#{cfg.pagesize}';"
 
 
   # 一些gulp构建配置
