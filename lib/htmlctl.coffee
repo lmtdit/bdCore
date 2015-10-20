@@ -48,8 +48,8 @@ _buildHtml = (data)->
         # 给html中的图片链接加上Hash
         _source = _replaceImg(_source)
         # 如果不是开发环境，则压缩html
-        if config.env isnt 'local'
-            # _source = _htmlMinify(_source)
+        if config.env isnt 'dev'
+            _source = _htmlMinify(_source)
             gutil.log color.cyan("'#{_name}'"),"combined."
                            
         butil.mkdirsSync(path.dirname(_outputPath))
